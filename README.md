@@ -1,5 +1,11 @@
 ## JavaScript
 
+Someone told me that [I don't know JS](https://github.com/getify/You-Dont-Know-JS), but ...
+
+![](https://media.giphy.com/media/tnasbNAUBlDC8/giphy.gif)
+
+In all seriousness, these are the personal notes I took while learning JavaScript. I'll continue to occasionally add to them, and PRs are accepted if you want to add to them, too!
+
 [TOC]
 
 ### Primitives
