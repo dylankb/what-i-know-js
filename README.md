@@ -1,4 +1,4 @@
-## JavaScript
+# JavaScript
 
 Someone told me that [I don't know JS](https://github.com/getify/You-Dont-Know-JS), but ...
 
@@ -6,9 +6,242 @@ Someone told me that [I don't know JS](https://github.com/getify/You-Dont-Know-J
 
 In all seriousness, these are the personal notes I took while learning JavaScript. I'll continue to occasionally add to them, and PRs are accepted if you want to add to them, too!
 
-[TOC]
+- [JavaScript](#javascript)
+  * [Primitives](#primitives)
+    + [Strings](#strings)
+      - [Concatenation](#concatenation)
+    + [Numbers](#numbers)
+      - [Arithmetic operators](#arithmetic-operators)
+  * [Objects basics](#objects-basics)
+    + [Arrays](#arrays)
+    + [Accessing object internals](#accessing-object-internals)
+  * [Falsiness](#falsiness)
+  * [Expressions](#expressions)
+  * [Statements](#statements)
+  * [Equality](#equality)
+  * [Mutability](#mutability)
+    + [Primitives](#primitives-1)
+  * [Objects](#objects)
+  * [Conversion](#conversion)
+  * [Global object](#global-object)
+  * [Variable hoisting](#variable-hoisting)
+    + [ES6 and variable scoping](#es6-and-variable-scoping)
+  * [Functions](#functions)
+    + [Function parameters](#function-parameters)
+    + [Scope](#scope)
+    + [function scope and params](#function-scope-and-params)
+    + [Examples of global/function scoping principles](#examples-of-globalfunction-scoping-principles)
+    + [First class objects](#first-class-objects)
+    + [Function expressions vs. declarations](#function-expressions-vs-declarations)
+    + [Function Hoisting](#function-hoisting)
+    + [Iteration](#iteration)
+    + [IIFE](#iife)
+    + [Callbacks](#callbacks)
+      - [Reduce - A form reduction example](#reduce---a-form-reduction-example)
+    + [Pure functions](#pure-functions)
+    + [Meta-programming functions](#meta-programming-functions)
+  * [Objects](#objects-1)
+    + [`this`](#this)
+    + [Cloning / copying objects](#cloning--copying-objects)
+      - [Shallow copies](#shallow-copies)
+      - [Deep nesting](#deep-nesting)
+    + [Factory functions](#factory-functions)
+    + [Constructors](#constructors)
+    + [Object literals and constructors](#object-literals-and-constructors)
+    + [Prototype](#prototype)
+      - [Methods to test prototype relationships](#methods-to-test-prototype-relationships)
+      - [Object.create(obj)](#objectcreateobj)
+    + [Prototypes & "Inheritance"](#prototypes--inheritance)
+      - [Prototype chain](#prototype-chain)
+    + [Prototypal inheritance](#prototypal-inheritance)
+      - [Benefits of prototype inheritance](#benefits-of-prototype-inheritance)
+    + [Methods can be overridden locally](#methods-can-be-overridden-locally)
+      - [`Object.getOwnPropertyNames` and `object.hasOwnProperty`](#objectgetownpropertynames-and-objecthasownproperty)
+      - [Shadowing properties](#shadowing-properties)
+    + [Prototype accessor/shortcut](#prototype-accessorshortcut)
+    + [Constructors + prototype chain](#constructors--prototype-chain)
+      - [Directly setting prototypes](#directly-setting-prototypes)
+      - [Constructor prototypes](#constructor-prototypes)
+    + [Constructors and prototype internals](#constructors-and-prototype-internals)
+    + [Frozen non-writeable methods & properties](#frozen-non-writeable-methods--properties)
+    + [OLOO vs Pseudoclassical](#oloo-vs-pseudoclassical)
+      - [The Pseudo-classical Pattern](#the-pseudo-classical-pattern)
+      - [OLOO Pattern](#oloo-pattern)
+  * [Functions Pt. II (contexts)](#functions-pt-ii-contexts)
+    + [Execution contexts](#execution-contexts)
+    + [Global Object](#global-object)
+      - [ES6 globals](#es6-globals)
+    + [Implicit function execution context](#implicit-function-execution-context)
+    + [Explicit function execution: `call`, `apply`, and `bind`](#explicit-function-execution-call-apply-and-bind)
+    + [Bound functions](#bound-functions)
+  * [Loosing context](#loosing-context)
+    + [Method Losing Context when Taken Out of Object](#method-losing-context-when-taken-out-of-object)
+      - [Solution 1: Passing context](#solution-1-passing-context)
+      - [Solution 2: Binding the function](#solution-2-binding-the-function)
+      - [Solution 3: Add function as object method](#solution-3-add-function-as-object-method)
+    + [Internal function losing method context](#internal-function-losing-method-context)
+      - [Solution 1: Preserve context with a local variable](#solution-1-preserve-context-with-a-local-variable)
+      - [Solution 2: Pass context](#solution-2-pass-context)
+      - [Solution 3: Bind the context with a function expression](#solution-3-bind-the-context-with-a-function-expression)
+    + [Similar problem: Outer Function Referenced By Object Method Lacks Context](#similar-problem-outer-function-referenced-by-object-method-lacks-context)
+    + [Function as Argument Losing Surrounding Context](#function-as-argument-losing-surrounding-context)
+      - [Solution 1: self = this fix](#solution-1-self--this-fix)
+      - [Solution 2: Bind the argument function with the surrounding context](#solution-2-bind-the-argument-function-with-the-surrounding-context)
+      - [this.arg vs. context manipulation - forEach, some, every, map](#thisarg-vs-context-manipulation---foreach-some-every-map)
+    + [Nested object losing context](#nested-object-losing-context)
+    + [Indirect invocation](#indirect-invocation)
+  * [Function closures](#function-closures)
+    + [Nesting](#nesting)
+    + [Objects, functions, and closure](#objects-functions-and-closure)
+    + [Lexical Scoping](#lexical-scoping)
+    + [Shadowing](#shadowing)
+    + [Persistent reference](#persistent-reference)
+    + [Factory patten](#factory-patten)
+    + [Closure types](#closure-types)
+      - [Creating an IIFE closure](#creating-an-iife-closure)
+    + [Closures, callbacks & additional arguments](#closures-callbacks--additional-arguments)
+    + [Closures & OOP](#closures--oop)
+    + [Partial application](#partial-application)
+  * [Garbage collection](#garbage-collection)
+  * [DOM](#dom)
+    + [DOM Structure](#dom-structure)
+    + [Traversing DOM](#traversing-dom)
+      - [Nodes](#nodes)
+    + [Elements](#elements)
+      - [Searching by CSS selector](#searching-by-css-selector)
+    + [Interacting with the DOM](#interacting-with-the-dom)
+      - [Element Attribute](#element-attribute)
+    + [Attribute properties](#attribute-properties)
+    + [href](#href)
+    + [classList](#classlist)
+    + [style](#style)
+    + [Modifying element text](#modifying-element-text)
+    + [Creating nodes](#creating-nodes)
+    + [Adding nodes to DOM](#adding-nodes-to-dom)
+    + [Removing nodes](#removing-nodes)
+    + [Events](#events)
+      - [Adding event listeners](#adding-event-listeners)
+      - [Removing EventListeners](#removing-eventlisteners)
+    + [Page life-cycle events](#page-life-cycle-events)
+    + [User events](#user-events)
+      - [Mouse events](#mouse-events)
+      - [Keyboard events](#keyboard-events)
+    + [Event object](#event-object)
+    + [Capturing and bubbling](#capturing-and-bubbling)
+    + [Delegation](#delegation)
+    + [Event loop](#event-loop)
+      - [Event loop / closure bug](#event-loop--closure-bug)
+      - [IIFE solution](#iife-solution)
+      - [ES6 solution](#es6-solution)
+  * [XML HTTP Requests](#xml-http-requests)
+  * [Window](#window)
+    + [`Window.history`](#windowhistory)
+    + [`Window.location`](#windowlocation)
+  * [Tricks](#tricks)
+    + [Make a copy of something (like an object)](#make-a-copy-of-something-like-an-object)
+    + [Make N length string**](#make-n-length-string)
+    + [Make an N length array of letters](#make-an-n-length-array-of-letters)
+    + [Make an empty iterable array](#make-an-empty-iterable-array)
+    + [Make an N-1 length array of integers](#make-an-n-1-length-array-of-integers)
+    + [`toString()` to determine an object's type**](#tostring-to-determine-an-objects-type)
+    + [Logging](#logging)
+  * [Debugging](#debugging)
+  * [Preventing errors](#preventing-errors)
+  * [jQuery](#jquery)
+    + [Basics](#basics)
+      - [Loading the dom](#loading-the-dom)
+      - [Chaining](#chaining)
+    + [Creating elements](#creating-elements)
+    + [jQuery vs. vanilla JS](#jquery-vs-vanilla-js)
+    + [Traversal](#traversal)
+      - [jQuery specific selectors](#jquery-specific-selectors)
+      - [`filter()`](#filter)
+    + [Other search methods](#other-search-methods)
+      - [CSS attribute matchers](#css-attribute-matchers)
+    + [`closest()` vs. `parents()`](#closest-vs-parents)
+    + [`index()`](#index)
+    + [`each()` method](#each-method)
+    + [`eq()`](#eq)
+    + [Form management](#form-management)
+      - [Grabbing input from an input field](#grabbing-input-from-an-input-field)
+      - [Resetting a form](#resetting-a-form)
+      - [Getting data from a form](#getting-data-from-a-form)
+      - [`prop()` - setting a checked radio](#prop---setting-a-checked-radio)
+    + [Other traversal methods](#other-traversal-methods)
+    + [DOM display values](#dom-display-values)
+      - [`position()` vs. `offset()`](#position-vs-offset)
+      - [`height()` vs. `innerHeight()`](#height-vs-innerheight)
+    + [DOM manipulation](#dom-manipulation)
+      - [`css()` method](#css-method)
+      - [Scroll position - `scrollTop()`](#scroll-position---scrolltop)
+      - [`prepend()` vs. `prependTo()`](#prepend-vs-prependto)
+    + [jQuery patterns](#jquery-patterns)
+      - [Modal toggling](#modal-toggling)
+      - [Tabular navigation](#tabular-navigation)
+    + [Animations](#animations)
+      - [fade animations](#fade-animations)
+      - [slide animations](#slide-animations)
+      - [`animate`](#animate)
+    + [Stoping animations](#stoping-animations)
+    + [Events](#events-1)
+      - [Page load vs. events](#page-load-vs-events)
+      - [Event types](#event-types)
+      - [Callbacks](#callbacks-1)
+      - [Delegated events](#delegated-events)
+        * [Automatically listen for new elements](#automatically-listen-for-new-elements)
+        * [Efficient event handling](#efficient-event-handling)
+        * [Cleaning up conditional logic](#cleaning-up-conditional-logic)
+      - [Namespaced events](#namespaced-events)
+      - [Clearing events](#clearing-events)
+      - [Stopping event propogation](#stopping-event-propogation)
+      - [Specifying a default event on page load with `on()`](#specifying-a-default-event-on-page-load-with-on)
+    + [Functions](#functions-1)
+      - [`proxy`](#proxy)
+    + [Ajax](#ajax)
+      - [Organizing ajax calls in objects](#organizing-ajax-calls-in-objects)
+    + [Binding ajax method calls as event handlers - extending objects](#binding-ajax-method-calls-as-event-handlers---extending-objects)
+    + [Good jquery code](#good-jquery-code)
+      - [Variable naming](#variable-naming)
+      - [Meaningful function names](#meaningful-function-names)
+      - [Reduce function calls](#reduce-function-calls)
+      - [Code brevity](#code-brevity)
+      - [Efficiency](#efficiency)
+    + [Troubleshoting](#troubleshoting)
+    + [HTML Data Attributes](#html-data-attributes)
+      - [Get or set the value of an HTML data attribute](#get-or-set-the-value-of-an-html-data-attribute)
+      - [Set and retrieve custom data on an element after the page has been rendered](#set-and-retrieve-custom-data-on-an-element-after-the-page-has-been-rendered)
+      - [Hyphenated data properties](#hyphenated-data-properties)
+  * [Handlebars](#handlebars)
+    + [Precompiled scripts](#precompiled-scripts)
+  * [Localstorage](#localstorage)
+  * [ES6](#es6)
+    + [`let` and `const`](#let-and-const)
+      - [`let`](#let)
+      - [`const`](#const)
+    + [Shorthand property declaration](#shorthand-property-declaration)
+    + [Splat operator](#splat-operator)
+      - [Combining / Gathering](#combining--gathering)
+      - [Objects](#objects-2)
+      - [Values](#values)
+    + [Destructuring](#destructuring)
+      - [Object properties](#object-properties)
+      - [Using destructuring to make method invocations clearer](#using-destructuring-to-make-method-invocations-clearer)
+      - [Optional args object](#optional-args-object)
+    + [Rest](#rest)
+    + [Spread](#spread)
+    + [Arrow functions](#arrow-functions)
+      - [Abbreviated function syntax](#abbreviated-function-syntax)
+      - [Automatic context binding](#automatic-context-binding)
+    + [Classes](#classes)
+    + [Module import / export](#module-import--export)
+    + [Generator function](#generator-function)
+    + [Running babel from the command line](#running-babel-from-the-command-line)
+  * [Linting](#linting)
+    + [Airbnb rules (ES5)](#airbnb-rules-es5)
+  * [Node](#node)
+    + [Setup](#setup)
 
-### Primitives
+## Primitives
 
 * number
 * string
@@ -121,9 +354,9 @@ Use whole numbers (1 cent rather than .01 dollars) - division with floats is les
 * `-Infinity`: when you need a number that's less than all other numbers
 * `NaN`: typically a math function failed
 
-### Arithmetic operators
+#### Arithmetic operators
 
-Modulo
+**Modulo**
 
 Often the `%` represents a modulo operator, but in JS it's actually [remainder] operator(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Remainder_()). To demonstrate the differences between the two, let's look at how `10 % -3` would be treated in each case:
 
@@ -143,6 +376,8 @@ The difference here is that a remainder is using `trunc` and a modulo would use 
 -4
 ```
 
+## Objects basics
+
 ### Arrays
 
 **Removing a value**
@@ -153,13 +388,11 @@ arr.splice(0,1)   // 0
 arr               // [1,2]
 ```
 
-### Object basics
-
 **Getting an object's keys**
 
 `keys = Object.keys(obj)`
 
-#### Accessing object internals
+### Accessing object internals
 
 ```js
 var obj = { a: 1, "b": 2, 1: 3 }
@@ -199,7 +432,7 @@ Or if you need to return an array or make access the current index in a callback
  }
 ```
 
-### Falsiness
+## Falsiness
 
 **Falsy values in JavaScript**
 
@@ -224,7 +457,7 @@ Some ways to test this out are below:
 Boolean(0);    // false
 ```
 
-### Expressions
+## Expressions
 
 Expression is any valid code that resolves to a value.
 
@@ -252,18 +485,21 @@ b && (a = false); // a is still true, because (a = false) is never evaluated
 # => 2
 ```
 
-### Statements
+## Statements
 
 * Not meant to return a value (help with logic `if...else` or instantiation `var a;`)
 * Cannot be part of an expression
 * Statements are expressions
 
 ```js
-var c = (var a = 1); // error. statement cannot be part of an expression.
-var c = (a = 1); // statements cannot
+// These both return errors. A statement cannot be part of an expression.
+var c = (var a = 1);
+var c = (a = 1);
 ```
 
-### Equality
+## Equality
+
+**Type coercion**
 
 Implicit type coercion is an interesting feature of JS:
 
@@ -276,6 +512,8 @@ true
 3 === "3"
 false
 ```
+
+**Object equality**
 
 Two variables containing objects are only equal if they reference the same object.
 
@@ -304,9 +542,9 @@ isValidRoute(
 )
 ```
 
-### Primitives & Objects - Mutability
+## Mutability
 
-**Primitives**
+### Primitives
 
 The primitives are: numbers, strings, booleans, `null` and `undefined`. Everything else is an object.
 
@@ -339,7 +577,7 @@ Variables don't hold values; they hold references to those values. _A Function c
 
 An object can have its internal values changed within a function without having the reference change. Read more below.
 
-**Objects**
+## Objects
 
 Objects are mutable. Arrays are objects
 
@@ -365,7 +603,7 @@ If a Function can't change the value of a variable passed in, how is this possib
 
 > `increment` does not reassign `thing` (which is the same as `counter`). Instead, `increment` modifies a property of the Object: the `count` property. This alters the state of the object, but it does not create a new Object, so `thing` and `counter` continue to point to the same thing.
 
-### Conversion
+## Conversion
 
 String => Number
 
@@ -392,7 +630,7 @@ Simpler method
 !!(0)     // false
 ```
 
-### Global object
+## Global object
 
 Global variables are properties of the global `window` object
 
@@ -409,7 +647,7 @@ end
 window.bar;       // function bar() { return 1; }
 ```
 
-### Variables hoisting
+## Variable hoisting
 
 Read the code and the comments below and try to figure out the answer.
 
@@ -459,7 +697,7 @@ say(b);   // undefined
 
 Without understanding this rule one would expect the code to have a `ReferrenceError` for a missing variable `a`.
 
-#### ES6 and variable scoping
+### ES6 and variable scoping
 
 ES6 variables, are not hoisted and will therefore throw a reference error if accessed too early.
 
@@ -471,7 +709,7 @@ var a;
 let b;
 ```
 
-### Functions
+## Functions
 
 There are four types of functions in JavaScript
 
@@ -511,7 +749,7 @@ function () {
 
 Functions without a `return` statement return `undefined`
 
-#### Function parameters
+### Function parameters
 
 * Calling a Function with too few or too many arguments does not raise an error.
 * Within a Function, an argument that wasn't provided in the call will have the value `undefined`.
@@ -531,7 +769,7 @@ undefined
 NaN
 ```
 
-#### Scope
+### Scope
 
 Scope of a function is a set of variables, objects, functions accessible within a function body.
 
@@ -612,7 +850,7 @@ hippityHoppity();
 console.log(bunnyNames); // "[BUNSTER, Mopsy]"
 ```
 
-#### function scope and params
+### function scope and params
 
 **Primitives:** are passed in as **reference-by-value** - the function does not modify the passed in object.
 
@@ -630,7 +868,7 @@ Assign values to variables instead.
 
 **Objects:** are passed into functions using **pass-by-reference** - (kinda, the value is the reference) modifications to objects inside the function are destrutive
 
-#### Examples of global/function scoping principles
+### Examples of global/function scoping principles
 
 Functions can not only call global variables inside methods, they can also destructively modify global variables.
 
@@ -666,7 +904,7 @@ Destructive
 * `Foo();` modified the global object so that `window.a = 2`
 * `obj.bar();` will only return 2, because `Foo.call(obj)` permanently modified the obj already. If we would leave it out, then the result will be `Uncaught TypeError: obj.bar is not a function`.
 
-#### First class objects
+### First class objects
 
 Functions are first class objects, meaning they can be passed into other functions like other primitive objects.
 
@@ -683,7 +921,7 @@ function compareSize(num1, num2) {
 
 The function could also be passed in as an anonymous function expression as well.
 
-#### Function expressions vs. declarations
+### Function expressions vs. declarations
 
 ```js
 function outer() { return "hello world" }
@@ -721,7 +959,7 @@ foo();                      // Reference Error
 
 One important distinction between function expressions vs. declarations is hoisting.
 
-#### Function Hoisting
+### Function Hoisting
 
 **Function declarations hoisting**
 
@@ -784,7 +1022,7 @@ Code first looks for function declarations, and sets the function to the return 
 
 Function expressions are evaluated with the rest of the code.
 
-#### Iteration
+### Iteration
 
 **Short ciruiting loops**
 
@@ -823,7 +1061,7 @@ It's not possible in a vanilla JS `forEach` callback.
 
 If it was, the code would never have reached `3`. The reason this is is because a new function is created. This isn't necessaryily the case though for JS library's like jQuery or lodash. Read more [here](https://webapplog.com/breaking-bad-loops-in-javascript-libraries/).
 
-#### IIFE
+### IIFE
 
 Immediately invocated function expressions
 
@@ -855,7 +1093,7 @@ var otherFunction = obj.myFunction;
 otherFunction();     // function invocation
 ```
 
-#### Callbacks
+### Callbacks
 
 *Functions that take a Function as an argument.*
 
@@ -872,7 +1110,7 @@ Ordering | Arrange elements by sorting | new Array| 	`sort`
 Reducing / Folding | Iteratively compute a result using each element | single value | `reduce`, `reduceRight`
 Interrogation | Determine if an Array's elements pass a test |	single value |	`every`, `some`
 
-##### Reduce - A form reduction example
+#### Reduce - A form reduction example
 
 To demonstrate how `reduce` works, we'll go over a common task - gathering and manipulating form inputs.
 
@@ -961,13 +1199,13 @@ console.log(formObject);
 // { endX : "3", endY : "4", startX: "1", startY : "2" }
 ```
 
-#### Pure functions
+### Pure functions
 
 **Pure functions** - a Function that doesn't cause any side effects when it is invoked
 
 Functions can modify values outside of them, either by accessing variables defined in outer scopes or by mutating objects that were passed to the function as an argument.
 
-#### Meta-programming functions
+### Meta-programming functions
 
 An example of how you would iterativelly create a number of methods on a specific object
 
@@ -989,7 +1227,7 @@ _.isBoolean(false) // true
 
 ## Objects
 
-#### `this`
+### `this`
 
 * refers to the current execution context of a function
 * is used to access properties defined on objects from inside that object
@@ -1004,9 +1242,9 @@ var = {
  }
 ```
 
-#### Cloning / copying objects
+### Cloning / copying objects
 
-##### Shallow copies
+#### Shallow copies
 
 Getting code like this to work isn't too hard
 
@@ -1025,7 +1263,7 @@ new_object = Object.create(first);
 new_object = Object.assign({}, first);
 ```
 
-##### Deep nesting
+#### Deep nesting
 
 Cloning deeply nested objects is a bit trickier.
 
@@ -1062,7 +1300,7 @@ new_array[0]['a'] = 2
 array // [{ 'a': 1 }]
 ```
 
-ES6
+**ES6**
 
 The splat operator replaces apply, so we could try using that one as well. `let new_array = [...array]`. However, it too copies references.
 
@@ -1133,7 +1371,7 @@ Dog("Sami", 30);
 window.getSize();  // large
 ```
 
-#### Object literals and constructors
+### Object literals and constructors
 
 Although constructors are very useful, object literals still have a place. In particular, when your constructor has many parameters and/or you are only making one object.
 
@@ -1274,9 +1512,9 @@ Object.getPrototypeOf(baz) === bar;               // true
 foo.isPrototypeOf(baz);                     // true - because foo is on qux's prototype chain
 ```
 
-#### Prototypal inheritance - JavaScript objects inherit behavior from other objects
+### Prototypal inheritance
 
-JS object linked on the prototype chain can share behavior. Below are some simple examples:
+JavaScript objects inherit behavior from other objects. JS object linked on the prototype chain can share behavior. Below are some simple examples:
 
 ```js
 function Dog() {
@@ -1358,7 +1596,7 @@ Objects can be created directly from other objects. Behaviors (methods) and stat
 
 Objects on the bottom of the prototype chain can "delegate" requests to the upsteam objects to be handled.
 
-#### Methods can be overridden locally
+### Methods can be overridden locally
 
 ```js
 var dog = {
@@ -1396,7 +1634,7 @@ Object.getOwnPropertyNames(bar);    // ["b"]
 `Object.prototype.isPrototypeOf(obj)`: tests if the object is in another object's prototype chain
 `Object.prototype.hasOwnProperty(prop)`: tests whether the property is defined on the object itself
 
-##### Shadowing properties
+#### Shadowing properties
 
 Once you change the object's property, it is no longer a constructor (prototype?) derived property.
 
@@ -1452,7 +1690,7 @@ foo.hasOwnProperty( "a" ); // true  ... but should be false
 bar.hasOwnProperty( "a" ); // false
 ```
 
-#### Prototype accessor/shortcut
+### Prototype accessor/shortcut
 
 `Array.prototype` \ `[]`
 
@@ -1465,7 +1703,7 @@ Does not work in all cases
 `Object.getPrototypeOf([]) === []              \\ false`
 `Object.getPrototypeOf([]) === Array.prototype \\ true`
 
-#### Constructors + prototype chain
+### Constructors + prototype chain
 
 * Every function has a special `prototype` property.
 
@@ -1523,7 +1761,7 @@ Note that `poodle`s constructor is `Dog` but the prototype is `Poodle.prototype`
 
 We do `Poodle.prototype = Object.create(Dog.prototype)`, not `poodle.prototype = Object.create(Dog.prototype)`. An instance of the object is not writeable in this way. In ES6 you can use `Object.setPrototypeOf`.
 
-##### Directly setting prototypes
+#### Directly setting prototypes
 
 **Don't share prototype references**
 
@@ -1548,7 +1786,7 @@ Using `Object.create` "make a new 'Poodle dot prototype' object that's linked to
 Object.setPrototypeOf( Bar.prototype, Foo.prototype );
 ```
 
-##### Constructor prototypes
+#### Constructor prototypes
 
 `Object.getPrototypeOf(Dog)`    // `function () {}`
 
@@ -1564,7 +1802,7 @@ Note that the prototype of a Function Object (i.e `Dog`) can not be modified, un
 
 What do you do if you want to add a , well since `obj.prototype` is undefined you could use the `__proto__` method
 
-#### Constructors and prototype internals
+### Constructors and prototype internals
 
 ```js
 function Foo() {
@@ -1597,7 +1835,7 @@ a1.constructor === Object; // true!
 
 `a1` has no `.constructor` property, so it delegates up the `[[Prototype]]` chain to `Foo.prototype`. But that object doesn't have a `.constructor` either (like the default `Foo.prototype` object would have had!), so it keeps delegating, this time up to `Object.prototype`, the top of the delegation chain.
 
-#### Frozen non-writeable methods & properties
+### Frozen non-writeable methods & properties
 
 **Object.defineProperties()**
 
@@ -1704,7 +1942,7 @@ First-class Functions initially have no context when created; they receive a con
 
 In other words, `this` changes based on how a function is invoked, not how it was defined.
 
-#### Global Object
+### Global Object
 
 The global object `window` is the implicit function execution context for global functions and expressions
 
@@ -1735,11 +1973,11 @@ window.foo;           // 1
 window.bar;           // undefined
 ```
 
-##### ES6 globals
+#### ES6 globals
 
 `let` and `const` variables aren't accessible by writing `window.variable` name.
 
-#### Implicit function execution context
+### Implicit function execution context
 
 ```js
 var object = {
@@ -1756,7 +1994,7 @@ bar();               // "this here is: [object Window]"
 
 This is an example that shows that the binding of a function and context object happens when the function is **executed**, not when the function is defined.
 
-#### Explicit function execution: `call`, `apply`, and `bind`
+### Explicit function execution: `call`, `apply`, and `bind`
 
 JavaScript provides tools to manipulate function context.
 
@@ -1873,7 +2111,7 @@ The context of `object` has been permanently bound to `baz()` (the method `objec
 
 `bind` is a good option for fixing the loss of context problem because you can call it multiple times without having to use `call` or `self` each time.
 
-#### Bound functions
+### Bound functions
 
 * A bound function is a function bind with an object.
 * `.bind()` makes a permanent context link and will always keep it. A bound function cannot change its linked context when using `.call()` or `.apply()` with a different context. Even calling `bind` again has no effect.
@@ -1891,9 +2129,9 @@ new one(); // => Object // Call the bound function as a constructor
 
 Only `new one` was able to change the context.
 
-### Loosing context
+## Loosing context
 
-#### Method Losing Context when Taken Out of Object
+### Method Losing Context when Taken Out of Object
 
 ```js
 var john = {
@@ -1938,7 +2176,7 @@ foo.call(john);
 // ReferenceError: john is not defined
 ```
 
-##### Solution 1: Passing context
+#### Solution 1: Passing context
 
 You can also pass in context to functions as parameters
 
@@ -1960,7 +2198,7 @@ foo();
 // "hello, John Doe"
 ```
 
-##### Solution 2: Binding the function
+#### Solution 2: Binding the function
 
 If you can't change the function context (for example passing it to a library method that you don't own), then `bind` is more useful:
 
@@ -1979,7 +2217,7 @@ function repeatThreeTimes(func) {  // Do not need to explicitly call context obj
 foo();
 ```
 
-##### Solution 3: Add function as object method
+#### Solution 3: Add function as object method
 
 The function below is missing the correct object context.
 
@@ -2005,7 +2243,7 @@ temperatures.average = average
 console.log(temperatures.average());  // 48
 ```
 
-#### Internal function losing method context
+### Internal function losing method context
 
 ```js
 var obj = {
@@ -2050,7 +2288,7 @@ var obj = {
 obj.foo(); // bye world
 ```
 
-##### Solution 1: Preserve context with a local variable
+#### Solution 1: Preserve context with a local variable
 
 `self = this` idiom will fix this.
 
@@ -2071,7 +2309,7 @@ var obj = {
 obj.foo();        // hello world
 ```
 
-##### Solution 2: Pass context
+#### Solution 2: Pass context
 
 ```js
 var obj = {
@@ -2088,7 +2326,7 @@ var obj = {
 obj.foo();        // hello world
 ```
 
-##### Solution 3: Bind the context with a function expression
+#### Solution 3: Bind the context with a function expression
 
 This will bind the `bar` function to its surrounding context when the function itself is defined. Note that we can only use `bind` with a function expression, not a function declaration.
 
@@ -2108,7 +2346,7 @@ obj = {
 obj.foo();
 ```
 
-#### Similar problem: Outer Function Referenced By Object Method Lacks Context
+### Similar problem: Outer Function Referenced By Object Method Lacks Context
 
 
 ```js
@@ -2169,7 +2407,7 @@ logThis.bind(this)
 logThis(); // Window
 ```
 
-#### Function as Argument Losing Surrounding Context
+### Function as Argument Losing Surrounding Context
 
 ```js
 function repeatThreeTimes(func) {
@@ -2197,7 +2435,7 @@ john.greetings();
 
 The `this` context is also not going to be preserved, because even though the function expression is defined within the object, it's not executed with the context of the object.
 
-##### Solution 1: self = this fix
+#### Solution 1: self = this fix
 
 ```js
 ...
@@ -2211,7 +2449,7 @@ The `this` context is also not going to be preserved, because even though the fu
 ...
 ```
 
-##### Solution 2: Bind the argument function with the surrounding context
+#### Solution 2: Bind the argument function with the surrounding context
 
 The callback function within `repeatThreeTimes` is a function expression, and therefore we can use `bind` to set the context.
 
@@ -2227,7 +2465,7 @@ The callback function within `repeatThreeTimes` is a function expression, and th
 
 The same thing happens with certain built in iterator/callback methods
 
-##### this.arg vs. context manipulation - forEach, some, every, map
+#### this.arg vs. context manipulation - forEach, some, every, map
 
 1) Use `bind`
 
@@ -2275,7 +2513,7 @@ obj = {
 obj.foo();
 ```
 
-#### Nested object losing context
+### Nested object losing context
 
 ```js
 var myObject = {
@@ -2299,7 +2537,7 @@ or `bind`
 `var countPrint = myObject.myChildObject.myMethod.bind(myObject)
 console.log(countPrint());` // 1
 
-#### Indirect invocation
+### Indirect invocation
 
 Passing around context can be used to create class hierarchies in ES5 to call the parent constructor.
 
@@ -2320,7 +2558,7 @@ myRabbit; // { name: "White Rabbit', countLegs: 4 }
 
 [Link](https://rainsoft.io/gentle-explanation-of-this-in-javascript/)
 
-### Function closures
+## Function closures
 
 * JavaScript functions create closures when they are invoked.
 * Closures allow code within a function to access any variable that was accessible at the time the function was declared.
@@ -2339,7 +2577,7 @@ Another snippet about closures:
 
 The first point is more obvious, the second may not be. What does it mean, the variables from the context from where it was defined?
 
-#### Nesting
+### Nesting
 
 To be more specific, an inner function has access to variables defined in any outer/surounding scopes (includes function and global scopes). It doesn't matter how deeply nested a function is.
 
@@ -2361,7 +2599,7 @@ beginGreeting();          // 'Julian'
 
 This would still work if `name` was defined in the global scope, above `beginGreeting()`.
 
-#### Objects, functions, and closure
+### Objects, functions, and closure
 
 This same principle works for objects, and functions within objects
 
@@ -2385,14 +2623,14 @@ Upper (or parent) scopes and available to lower (nested) scopes.
 
 Objects within functions have the same scope as the function are they are in.
 
-#### Lexical Scoping
+### Lexical Scoping
 
 JS uses the structure of the source code to determine the variable's scope.
 
 * It can access any variables defined within it.
 * It can access any variables that were in scope code can access from the context where the function was defined.
 
-#### Shadowing
+### Shadowing
 
 When searching for a variable, JS searches this hierarchy from the *bottom* to the *top*. It stops and returns the first variable it finds with a matching name. This means that variables in a _lower scope_ can shadow, or hide, a variable with the same name in a _higher scope_.
 
@@ -2418,7 +2656,7 @@ function greet(name) {
 greet('Sam');   // Sam
 ```
 
-#### Persistent reference
+### Persistent reference
 
 The value of a variable can change after creating a closure that includes the variable. When this happens, the closure sees the new value; the old value is no longer available.
 
@@ -2435,7 +2673,7 @@ count++;               // reassign count
 logCount();            // closure sees new value for count; logs: 2
 ```
 
-#### Factory patten
+### Factory patten
 
 ```js
 function createAdder() {
@@ -2455,7 +2693,7 @@ adder.add(1);
 adder.getValue(); // => 2
 ```
 
-#### Closure types
+### Closure types
 
 **Pass a function to a function**
 
@@ -2588,7 +2826,7 @@ doCount(); // 0  Can you tell why this isn't 1? :)
 doCount(); // 1
 ```
 
-##### Creating an IIFE closure
+#### Creating an IIFE closure
 
 You can use a function expression (FE) to create an IIFE if you do not want to assign the function
 
@@ -2633,7 +2871,7 @@ If you're unsure of the safety of naming a function, immediately executing is a 
 })(100);
 ```
 
-#### Closures, callbacks & additional arguments
+### Closures, callbacks & additional arguments
 
 Or, passing arguments to callback functions. Closure functions can take arguments
 
@@ -2710,7 +2948,7 @@ main()
 
 You do an IIFE on the inner closure function. Which allows `main`to retain access to any local variable  passed to it’s inner function. In this case we passed in `local`. So when the `main` is invoked in the new scope (`otherFunc`) you can take in additional params without worry about passing in your previous local ones.
 
-#### Closures & OOP
+### Closures & OOP
 
 This is some normal JS OOP code
 
@@ -2777,7 +3015,7 @@ newWorker.publicLogTitle();                    // 'garbage man'
 setTimeout(newWorker.publicLogTitle(), 1000);  // 'garbage man'
 ```
 
-#### Partial application
+### Partial application
 
 Call certain arguments ahead of time to be called later. Here's a very simple example:
 
@@ -2810,7 +3048,7 @@ var sayHi = partial(greet, "hi")
 sayHi("Sarah");                   // "Hi, Sarah!
 ```
 
-### Garbage collection
+## Garbage collection
 
 JS allocates memory when new variables or properties are declared, and deallocates the memory when those variables **go out of scope** or are deleted.
 
@@ -2936,7 +3174,7 @@ walk(document.body, function(node) {
 });
 ```
 
-#### Elements
+### Elements
 
 Elements have properties to traverse the DOM tree:
 
@@ -2988,7 +3226,7 @@ Method	 | Description | Returns
 > p.setAttribute('id', 'complex'); // <p class="intro" id="complex">…</p>
 ```
 
-#### Attribute properties
+### Attribute properties
 
 JavaScript exposes these certain attributes as gettable and settable properties of the DOM Element: `id`, `name`, `title`, and `value`
 
@@ -2999,7 +3237,7 @@ p.className // "intro"
 
 JavaScript doesn't provide all these properties on every `Element` type: the `name` and `value` attributes, in particular, are invalid on most elements.
 
-#### href
+### href
 
 Understanding attribute properties is helpful when working with the `href` attribute.
 
@@ -3022,7 +3260,7 @@ Incidentally, `pathname` seems like will also work here as it also gives you `/c
 
 jQuery makes this process a bit easier, allowing you do to something like this `a[href=^'/']`.
 
-#### classList
+### classList
 
 Working with the `class` attribute via `className` is inconvenient when elements have more than one class.
 
@@ -3036,7 +3274,7 @@ Name | Description
 
 `document.getElementById('primary_heading').classList.add('heading')`
 
-#### style
+### style
 
 The `style` attribute on an `Element` references a `CSSStyleDeclaration` Object:
 
@@ -3064,7 +3302,7 @@ To remove a CSS property*, set the property to `null` with the `style` property
 
 Use camel case instead `line-height` vs. `lineHeight`
 
-#### Modifying element text
+### Modifying element text
 
 Element properties do not include `textNodes`, so use `textContent` to element text.
 
@@ -3098,7 +3336,7 @@ Node Creation Method | Returns
 `document.createTextNode(text)`	| A new Text `node`
 `node.cloneNode(deepClone)` | Returns a copy of `node`, or all children if `deepClone` is `true`
 
-#### Adding nodes to DOM
+### Adding nodes to DOM
 
 Parent Node Method | Description
 -------------------|-------------
@@ -3131,7 +3369,7 @@ Position	| Description
 "beforeend"	| After the last child of the element
 "afterend"	| After the element
 
-#### Removing nodes
+### Removing nodes
 
 `node.remove()` and `parent.removeChild(node)` remove nodes from the DOM.
 
@@ -3228,7 +3466,7 @@ Following this pattern, we would remove the event listener set above like this:
 
 `document.onclick = undefined;`
 
-#### Page life-cycle events
+### Page life-cycle events
 
 **DOMContentLoaded**
 
@@ -3247,7 +3485,7 @@ Another, non event-driven way to execute JS after the `DOMContentLoaded` loaded 
 
 `load` event - fires after all assets are loaded
 
-#### User events
+### User events
 
 Event Type | Example Events
 -----------|---------------
@@ -3257,7 +3495,7 @@ Touch	| touchdown, touchup, touchmove
 Window	| scroll, resize
 Form	| submit
 
-##### Mouse events
+#### Mouse events
 
 Property | Description
 ---------|----------
@@ -3265,7 +3503,7 @@ button	| Which button was pressed (null for events unrelated to mouse clicks)
 clientX | The horizontal position of the mouse when the event occured, relative to the visible area of the page.
 clientY | The vertical position of the mouse when the event occured, relative to the visible area of the page.
 
-##### Keyboard events
+#### Keyboard events
 
 Property | Description
 ---------|------------|
@@ -3280,7 +3518,7 @@ metaKey | Boolean value indicating if the meta (or command) key was pressed.|
 
 More events [here](https://developer.mozilla.org/en-US/docs/Web/Events)
 
-#### Event object
+### Event object
 
 Property	| Description
 ----------|-----------
@@ -3288,7 +3526,7 @@ Property	| Description
 `currentTarget` | The object that is currently being targeted as the event bubbles up the DOM. This will be the object the event handler was attached to.
 `target`	| The object the event originally was fired upon.
 
-#### Capturing and bubbling
+### Capturing and bubbling
 
 **Event phases**
 
@@ -3308,7 +3546,7 @@ By default, event listeners will listen for events that are triggered during the
 
 It is a good practice to call `preventDefault()` or `stopPropagation()` as early as possible in an event handler to show clear intent.
 
-#### Delegation
+### Delegation
 
 **Event delegation** - a technique used to handle events triggered by multiple elements using a single event handler.
 
@@ -3334,9 +3572,9 @@ Cons
 
 * Code that has to handle multiple situations will become more complicated
 
-#### Event loop
+### Event loop
 
-##### Event loop / closure bug
+#### Event loop / closure bug
 
 ```js
 function delayLog() {
@@ -3358,7 +3596,7 @@ After the loop is finished and after the given time out the anonymous functions 
 
 There are two main ways to stop that from happening:
 
-###### IIFE solution
+#### IIFE solution
 
 One is to make a new scope so that a new variable is declared in each iteration.
 
@@ -3372,7 +3610,7 @@ for (var i = 1; i <= 10; i += 1) {
 }
 ```
 
-###### ES6 solution
+#### ES6 solution
 
 The other solution is based on the ES6 `let` keyword. If you use `let` instead of `var` in your `for` loop, what effectively happens is that in every iteration the variable `i` is redefined for you.
 
@@ -3384,7 +3622,7 @@ for (let i = 1; i <= 10; i += 1) {
 }
 ```
 
-### XML HTTP Requests
+## XML HTTP Requests
 
 Use the XMLHttpRequest object to send a HTTP request with JavaScript.
 
@@ -3431,22 +3669,22 @@ $('window').on('popstate', function(e) {
 )};
 ```
 
-### Tricks
+## Tricks
 
-#### Make a copy of something (like an object)
+### Make a copy of something (like an object)
 
 ```js
 var thing = thing.slice() // ES5
 ```
 
-#### Make N length string**
+### Make N length string**
 
 ```js
 new Array(3).join('x') // ES5
 'x'.repeat(3) // ES6
 ```
 
-#### Make an N length array of letters
+### Make an N length array of letters
 
 First, you could append `.split()` to each of the above two string creation examples.
 
@@ -3457,7 +3695,7 @@ Array.apply(null, new Array(2)).map(function (x) { return 'x' });
 new Array(2).fill('x');
 ```
 
-#### Make an empty iterable array
+### Make an empty iterable array
 
 For example you can't map over `new Array(2)` since it is an array of 2 elements without pointers. `[undefined, undefined]` is an array of 2 elements with pointers to `undefined`.
 
@@ -3467,7 +3705,7 @@ new Array(2).fill() // ES5
 [...new Array(2)] // ES6
 ```
 
-#### Make an N-1 length array of integers
+### Make an N-1 length array of integers
 
 You could map over the result and collect the index to create a 1..N array of numbers.
 
@@ -3476,13 +3714,13 @@ new Array(3).join('x').split('').map(function(x, i) { return i }); // ES5
 'x'.repeat(3).split('').map((x, i) => i); // ES6
 ```
 
-#### `toString()` to determine an object's type**
+### `toString()` to determine an object's type**
 
 ```js
 > document.toString() // "[object HTMLDocument]"
 ```
 
-#### Logging
+### Logging
 
 `console.table()` - displays an object in a table. (even `table()` works)
 
@@ -3504,7 +3742,7 @@ new Array(3).join('x').split('').map(function(x, i) { return i }); // ES5
 
 `getEventListeners(obj)` - object of event listeners on element
 
-### Debugging
+## Debugging
 
 * Check console for load issues
 * Turn on exception pauses in the Sources tab
@@ -3514,7 +3752,7 @@ new Array(3).join('x').split('').map(function(x, i) { return i }); // ES5
 * Nested breakpoints: Create a breakpoint/enter a debugger and disable breakpoints (tab icon in devtools) until, for example, the sixth iteration. Then re-enable them. Beats clicking continue X number of times.
 * Node debugging - set `debugger` and run `node debug script.js`
 
-### Preventing errors
+## Preventing errors
 
 * Guard clauses
 
@@ -3570,7 +3808,7 @@ An error is thrown `"<li></li>".text is not a function`, so nothing is appended.
 <ul></ul>
 ```
 
-#### Creating elements
+### Creating elements
 
 You can create an HTML element by supplying the html as the first argument, and then an object of html attributes and/or inline CSS properties
 
@@ -3585,7 +3823,7 @@ var $element = $("<div />", {
 });
 ```
 
-#### jQuery vs. vanilla JS
+### jQuery vs. vanilla JS
 
 Action | jQuery | JS
 -------| -------|---
@@ -3646,13 +3884,13 @@ The return value is a jQuery collection, so it is of course chainable
 
 `$('article li li').filter(":contains('ac ante')").next();`
 
-#### Other search methods
+### Other search methods
 
 **Negation**
 
 `$('td').not('.protected');`
 
-##### CSS attribute matchers
+#### CSS attribute matchers
 
 **Find (specific) parent**
 
@@ -3676,7 +3914,7 @@ Grabs all elements with an ID that begins with 'blind'.
 
 Grabs all elements with an ID that ends with 'blind'.
 
-#### `closest()` vs. `parents()`
+### `closest()` vs. `parents()`
 
 `closest` - Begins with the current element, and travels up the DOM tree until it finds a match for the supplied selector
 
@@ -3710,7 +3948,7 @@ Examples:
 
 `.parents()` does not search the current element, so it returns the next matching element(s) up the DOM tree
 
-#### `index()`
+### `index()`
 
 `index()` can be used in several ways. Refer to the examples below:
 
@@ -3756,7 +3994,7 @@ A modified version of this last one is useful for finding the element's index yo
 
 `$(div.parent p').index($(this))`
 
-#### `each()` method
+### `each()` method
 
 Iterates over a collection, setting `this` to the current DOM element (not a jQuery object)
 
@@ -3795,14 +4033,14 @@ $("li").filter("[data-id]").each(function(index) {
 // [li, li, li]
 ```
 
-#### `eq()`
+### `eq()`
 
 * Return item by passed in index as jQuery object.
 * Negative indexes work similar to Ruby (returns item n.length - 1)
 
-#### Form management
+### Form management
 
-##### Grabbing input from an input field
+#### Grabbing input from an input field
 
 All `input` elements return value from the `.val()` method.
 
@@ -3816,7 +4054,7 @@ $("form#some-form").submit(function(event) {
 
 Like many jQuery methods, it's also a setter
 
-##### Resetting a form
+#### Resetting a form
 
 The DOM form element has a reset method. Accessing it from a jQuery method looks like this
 
@@ -3830,19 +4068,19 @@ If you were in the element's context, you would already have access to the DOM e
 
 This resets the form's input values to their values on page load. So if we had an input with a default value of 1, `<input type="text" value="1">`, `reset()` would provide a `"1"` for that form field.
 
-##### Getting data from a form
+#### Getting data from a form
 
 `$('form').serializeArray();`
 
 requires `name` attribute on `input` elements
 
-##### `prop()` - setting a checked radio
+#### `prop()` - setting a checked radio
 
 `$(:radio).eq(0).prop(checked, true)`
 
 You could use `attr`, but checked isn't an attribute of `input` element - it's a property.
 
-#### Other traversal methods
+### Other traversal methods
 
 `nextAll()` - grab all of the sibling elements that come after the current one
 `prevAll()` - grab all of the sibiling elements prior to the current one
@@ -3931,13 +4169,13 @@ and `prepend` can prepend multiple content arguments*
 
 \* - A jQuery selector can select multiple elements, I was just emphasizing multiple selectors or arguments could be passed to each. This is also a slightly untrue in the case of ... ?
 
-#### jQuery patterns
+### jQuery patterns
 
-##### Modal toggling
+#### Modal toggling
 
 Using pure jQuery, one way to close a modal you would first filter for visibile modals, then hide or fade those modals out while revealing the newly clicked one.
 
-##### Tabular navigation
+#### Tabular navigation
 
 Hide all other tabs besides the first
 
@@ -4007,7 +4245,7 @@ $p.slideToggle({
 });
 ```
 
-#### animate
+#### `animate`
 
 * First argument - Object that represents the CSS properties to be animated and what values to end on for each.
 * Second argument - duration, then the optional easing method, then the callback.
@@ -4043,7 +4281,7 @@ $p.animate({
 
 `.delay()` - Useful for delaying between different animations - `$p.slideUp(250).delay(500).slideDown(250);`
 
-#### Stoping animations
+### Stoping animations
 
 Useful for controlling animations queue.
 
@@ -4252,7 +4490,7 @@ $('ul').on('click', 'a', function(e) {
 
 This uses one event listener that checks for anchor clicks
 
-##### Clean up conditional logic
+##### Cleaning up conditional logic
 
 Open external links in a new window
 
@@ -4403,7 +4641,7 @@ var comments = {
 
 By default the context will be a response object, and we need to set the context to the `comments` object. Therefore we use the `context` setting, set to `this`. Now when `comments.getCommentsFor` is called the context will `comments` within the callback.
 
-#### Binding ajax method calls as event handlers - extending objects
+### Binding ajax method calls as event handlers - extending objects
 
 If an object method containing an Ajax call is bound to an event, there is some added complication
 
@@ -4498,7 +4736,7 @@ This should return something
 <script src="js/scripts.js"></script>
 ```
 
-## HTML Data Attributes
+### HTML Data Attributes
 
 #### Get or set the value of an HTML data attribute
 
@@ -4568,7 +4806,7 @@ console.log($(date).data('date-of-birth'));
 console.log($(date).attr('data-date-of-birth'));
 ```
 
-### Handlebars
+## Handlebars
 
 **Basic use case**
 
@@ -4663,7 +4901,7 @@ console.log(render(data));
 // second:World!
 ```
 
-#### Precompiled scripts
+### Precompiled scripts
 
 Compilation is the most expensive part of Handlebars, so we can do it ahead of time.
 
@@ -4674,7 +4912,7 @@ Handy command:
 
 `handlebars templates/ -f fileNameOfCompiledTemplates.js`
 
-### Localstorage
+## Localstorage
 
 Localstorage
 
@@ -4728,11 +4966,11 @@ $(window).on("unload", function() {
     localStorage.setItem("note", $("textarea").val());
 });
 
-### ES6
+## ES6
 
-#### `let` and `const`
+### `let` and `const`
 
-##### `let`
+#### `let`
 
 `let` instantiates block scoped variables
 
@@ -4814,7 +5052,7 @@ funcs[3]();		// 3
 
 We are defining a `let` within a block scope, and `let` is a block scoped variable so it correctly closes over, making the correct `i` accessible to the function.
 
-###### `const`
+#### `const`
 
 That variable reference cannot be reassigned, but object internals can be.
 
@@ -4824,7 +5062,7 @@ a.push(4) # [1,2,3,4]
 const a = 42 # ReferrenceError
 ```
 
-#### Shorthand property declaration
+### Shorthand property declaration
 
 ```js
 // ES5
@@ -4838,11 +5076,11 @@ let a = 5;
 let objA = { a };
 ```
 
-#### Splat operator
+### Splat operator
 
-##### Combining / Gathering
+#### Combining / Gathering
 
-###### Objects
+#### Objects
 
 1) spread operator
 
@@ -4887,7 +5125,7 @@ We can do the same thing in the ES6 example with assign.
 Object.assign({}, oldThread, {  messages: oldThread.messages.concat(newMessage),});
 ```
 
-##### Values
+#### Values
 
 ```js
 function foo(...args) {
@@ -4903,9 +5141,9 @@ In ES5 `apply`
 foo.apply( null, [1,2,3] );
 ```
 
-#### Destructuring
+### Destructuring
 
-##### Object properties
+#### Object properties
 
 Both arrays and object can assign values to named variables:
 
@@ -4921,7 +5159,7 @@ let [ firstPerson, secondPerson ] = tenses;
 firstPerson // "I"
 ```
 
-##### Using destructuring to make method invocations clearer
+#### Using destructuring to make method invocations clearer
 
 If can't see how a function is defined, then code like this is down right confusing.
 
@@ -4978,7 +5216,7 @@ function calcBmi({ weight: w, height, callback, max }) {
 
 Note that the number and order of the arguments are now flexible.
 
-###### Optional args object
+#### Optional args object
 
 Options object can help provide flexible parameters to your function.
 
@@ -5004,7 +5242,7 @@ In the last three examples of `set` invocations, the variable `initializeFooToOn
 
 Background on this technique and dealing with destructred params in ES6 [here](http://2ality.com/2015/01/es6-destructuring.html#simulating-named-parameters-in-javascript)
 
-#### Rest
+### Rest
 
 Rest gathers individual elements together into an array
 
@@ -5013,7 +5251,7 @@ const aTail = (head, ...tail) => tail;
 aTail(1, 2, 3); // [2, 3]
 ```
 
-#### Spread
+### Spread
 
 **Collecting components**
 
@@ -5050,9 +5288,9 @@ moreNums = [...largerNums]
 // [2,3]
 ```
 
-#### Arrow functions
+### Arrow functions
 
-##### Abbreviated function syntax
+#### Abbreviated function syntax
 
 Example of equivalent functions
 
@@ -5096,7 +5334,7 @@ arrays.forEach(function(nums) {
 arrays.forEach(nums => nums.forEach(num => console.log(num)) )
 ```
 
-##### Automatic context binding
+#### Automatic context binding
 
 This code will now work without manual binding, which is convenient.
 
@@ -5114,7 +5352,7 @@ intro() // 'I'm 29'
 
 Watch out when using this with something like jQuery - you may lose jQuery `this` or the current element in an event handler.
 
-#### Classes
+### Classes
 
 Is this ES2017/ES7?
 
@@ -5172,7 +5410,7 @@ Function Bar() {
 }
 ```
 
-#### Module import / export
+### Module import / export
 
 Simple example.
 
@@ -5209,7 +5447,7 @@ export const routeByWindowWidth = (props, nextProps, route, maxWidth) => {
 import { routeByWindowWidth } from './utils/routeByWindowWidth';
 ```
 
-#### Generator function
+### Generator function
 
 Generator function which returns a promise which is thenable.
 
@@ -5220,7 +5458,7 @@ async function() {
 }
 ```
 
-#### Running babel from the command line
+### Running babel from the command line
 
 Based off an existing repo's package.json, but it should work.
 
@@ -5228,9 +5466,9 @@ First install `babel-cli` npm module, and then you should be able to execute bab
 
 `./node_modules/.bin/babel-node app.js`
 
-### Linting
+## Linting
 
-#### Airbnb rules (ES5)
+### Airbnb rules (ES5)
 
 Setting up ESLint with Airbnb rules in Atom for ES5
 
