@@ -102,9 +102,9 @@ var lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do \
 eiusmod tempor incididunt ut labore et dolore magna aliqua."
 ```
 
-#### Concatenation - ES6
+**ES6 - Concatenation**
 
-IN ES6 you can use interpolation to combine variables and strings.
+In ES6 you can use interpolation to combine variables and strings.
 
 ```js
 let name = "world"
@@ -125,12 +125,16 @@ Use whole numbers (1 cent rather than .01 dollars) - division with floats is les
 
 Modulo
 
-The `%` in JS is a remainder function, not a modulo. Here's how the two would be calculated:
+Often the `%` represents a modulo operator, but in JS it's actually [remainder] operator(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Remainder_()). To demonstrate the differences between the two, let's look at how `10 % -3` would be treated in each case:
 
 ```js
-var remainder = a - Math.trunc(a/b) * b;  // 10 - -4 * -3
-var modulo = a - Math.floor(a/b) * b;  // 10 - -3 * -3
+var a = 10;
+var b = -3;
+var remainder = a - (Math.trunc(a/b) * b);  // 10 - -4 * -3 => 2
+var modulo = a - (Math.floor(a/b) * b);     // 10 - -3 * -3 => -2
 ```
+
+The difference here is that a remainder is using `trunc` and a modulo would use `floor`.
 
 ```js
 > Math.trunc(-3.333)
@@ -172,7 +176,7 @@ obj[1]   // 3
 
 The key in the `[]` must be a string value. If a variable is placed in the brackets, it will use the value of the variable (converted to a string if necessary) as the key to look up.
 
-In the exmples above, `Referrence Error` happens because `a` and `b` are not instantiated variables.
+In the examples above, `Referrence Error` happens because `a` and `b` are not instantiated variables.
 
 **Access object property with a string**
 
@@ -5260,3 +5264,12 @@ Make sure your tests are specified in the env option:
 https://github.com/tlvince/eslint-plugin-jasmine/issues/56
 
 [^1]: https://github.com/getify/You-Dont-Know-JS/blob/master/es6%20%26%20beyond/ch2.md#let--for
+
+## Node
+
+### Setup
+
+- Uninstall any previous node installations [here](https://stackoverflow.com/questions/11177954/how-do-i-completely-uninstall-node-js-and-reinstall-from-beginning-mac-os-x)
+- Use one of the nvm [install scripts](https://github.com/creationix/nvm#installation)
+- `nvm install --lts`
+- `nvm alias default $NODE_VERSION` (preserves default between sessions, see [here](https://stackoverflow.com/questions/24585261/nvm-keeps-forgetting-node-in-new-terminal-session)
