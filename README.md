@@ -2236,7 +2236,7 @@ function average() {
 console.log(average(temperatures));  // NaN
 ```
 
-We could provide a context with methods like `call`, `apply`, and `bind`. However, we can add a method to the array (it's also an object), and simply call it from there
+We could provide a context with methods like `call`, `apply`, and `bind`. However, we can also add a method to the array (it's also an object), and simply call it from there
 
 ```js
 temperatures.average = average
@@ -2262,11 +2262,11 @@ obj.foo();        // undefined undefined
 
 Nested functions (within an object) lose context, which is a problem.
 
-Even though `foo` executes within the `obj` context, the call to `bar()` on line 9 does not provide an explicit context, which means that JavaScript binds the global object to the function. Function invocations do not... As a result, `this` on line 6 is the global object, not `obj`, thus `a` and `b` are undefined.
+Functions execute with their explicit context. The `foo` method is called on `obj`, which explicitly provides context for the `foo` method. However, the call to `bar()` on line 9 has no such explicit context - it's just a function declaration call `bar()`. Since how a function is invoked determines the context, and not where it is defined, the JS (compiler\engine?) sees that there's no explicit context for this call and therefore binds it to the default context - global object. As a result, `this` on line 6 is the global object, not `obj`, thus `a` and `b` are undefined within the `bar` function body.
 
 **Side note: Nested functions outside an object**
 
-Closure allow methods constructed with nested function to not experience this problem.
+The concept of closure in JavaScript makes it so nested function can avoid this problem. Obviously `a` and `b` will still be `undefined`, nested functions retain access to to variables defined in outer scopes so `c` and `d` will be available to any inner functions nested in `foo`.
 
 ```js
 var obj = {
@@ -2279,7 +2279,7 @@ var obj = {
       function baz() {
         console.log(c + " " + d);
       }
-      baz()
+      baz();
     }
     bar();
   },
@@ -2290,7 +2290,7 @@ obj.foo(); // bye world
 
 #### Solution 1: Preserve context with a local variable
 
-`self = this` idiom will fix this.
+A local variable in an outer scope is available to inner/nested functions. Therefore the `self = this` idiom will our context issue.
 
 ```js
 var obj = {
@@ -2310,6 +2310,8 @@ obj.foo();        // hello world
 ```
 
 #### Solution 2: Pass context
+
+Providing context
 
 ```js
 var obj = {
@@ -2528,6 +2530,8 @@ var myObject = {
 myObject.myChildObject.myMethod(); // undefined
 ```
 
+`myMethod` above is called on the `myChildObject`, so `myChildObject` is the execution context for `myMethod`. The object property `count` is in the `myObject` context, and therefore undefined when `myMethod` is invoked like it is above.
+
 I believe the only way to pass internal information about a given object is through specifying context (using indirect invocation) when calling or binding the context. We can do this either with `call`
 
 `myObject.myChildObject.myMethod.call(myObject); // 1`
@@ -2537,13 +2541,13 @@ or `bind`
 `var countPrint = myObject.myChildObject.myMethod.bind(myObject)
 console.log(countPrint());` // 1
 
-### Indirect invocation
+### Indirect invocation and constructor function
 
-Passing around context can be used to create class hierarchies in ES5 to call the parent constructor.
+Passing around context can be used to create class hierarchies in ES5 to call the parent constructor. This is an interesting way to delegate behavior.
 
 ```js
 function Identify(name) {
-  this.name = name;
+  this.name = name.toUpperCase();
 }
 
 function Rabbit(name, countLegs) {
@@ -2551,12 +2555,12 @@ function Rabbit(name, countLegs) {
   this.countLegs = countLegs;
 }
 var myRabbit = new Rabbit('White Rabbit', 4);
-myRabbit; // { name: "White Rabbit', countLegs: 4 }
+myRabbit; // { name: "WHITE RABBIT', countLegs: 4 }
 ```
 
 `Identity.call(this, name)` inside Rabbit makes an indirect call of the parent function to initialize the object.
 
-[Link](https://rainsoft.io/gentle-explanation-of-this-in-javascript/)
+For more about indirection invocation and an explanation of `this` in general, see here for a good [blog post](https://rainsoft.io/gentle-explanation-of-this-in-javascript/#51thisinindirectinvocation)
 
 ## Function closures
 
@@ -2579,7 +2583,7 @@ The first point is more obvious, the second may not be. What does it mean, the v
 
 ### Nesting
 
-To be more specific, an inner function has access to variables defined in any outer/surounding scopes (includes function and global scopes). It doesn't matter how deeply nested a function is.
+To be more specific, an inner function has access to variables defined in any outer/surrounding scopes (includes function and global scopes). It doesn't matter how deeply nested a function is.
 
 ```js
 function beginGreeting() {
@@ -5501,8 +5505,6 @@ P.S
 Make sure your tests are specified in the env option:
 https://github.com/tlvince/eslint-plugin-jasmine/issues/56
 
-[^1]: https://github.com/getify/You-Dont-Know-JS/blob/master/es6%20%26%20beyond/ch2.md#let--for
-
 ## Node
 
 ### Setup
@@ -5511,3 +5513,5 @@ https://github.com/tlvince/eslint-plugin-jasmine/issues/56
 - Use one of the nvm [install scripts](https://github.com/creationix/nvm#installation)
 - `nvm install --lts`
 - `nvm alias default $NODE_VERSION` (preserves default between sessions, see [here](https://stackoverflow.com/questions/24585261/nvm-keeps-forgetting-node-in-new-terminal-session)
+
+[^1]: https://github.com/getify/You-Dont-Know-JS/blob/master/es6%20%26%20beyond/ch2.md#let--for
