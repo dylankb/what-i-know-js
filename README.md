@@ -394,8 +394,12 @@ arr               // [1,2]
 
 ### Accessing object internals
 
+**Use bracket notation with variables and integers**
+
+The key in the `[]` must be a string value. If a variable is placed in the brackets, it will use the value of the variable (converted to a string if necessary) as the key to look up.
+
 ```js
-var obj = { a: 1, "b": 2, 1: 3 }
+var obj = { a: 1, "b": 2, 1: 3, $1: 4 }
 obj.a    // 1
 obj[a]   // Reference Error
 obj["a"] // 1
@@ -407,9 +411,17 @@ obj["b"] // 1
 obj[1]   // 3
 ```
 
-The key in the `[]` must be a string value. If a variable is placed in the brackets, it will use the value of the variable (converted to a string if necessary) as the key to look up.
-
 In the examples above, `Referrence Error` happens because `a` and `b` are not instantiated variables.
+
+An integer can serve as an object key, but you cannot use it with the object dot notation. From the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Property_accessors#Dot_notation)
+
+> [To use dot notation], the property must be a valid JavaScript identifier, i.e. a sequence of alphanumerical characters, also including the underscore ("_") and dollar sign ("$"), that cannot start with a number. For example, `object.$1` is valid, while `object.1` is not.
+
+```js
+// continued
+obj.1     // Error
+obj.$1   // 4
+```
 
 **Access object property with a string**
 
