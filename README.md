@@ -5047,11 +5047,11 @@ for (var i = 0; i < 5; i++) {
 funcs[3](); // 5
 ```
 
-The problem is there's only one `i` in the outer scope that was closed over.
+The problem is there is only one `i` in the outer scope that was closed over.
 
-If you use `for (let i = 0; i < 5; i++) {`, let declares an `i` not just for the for loop itself, but it redeclares a new `i` for each iteration of the loop. That means that closures created inside the loop iteration close over those per-iteration variables the way you'd expect.[^1]
+If you use `for (let i = 0; i < 5; i++) {`, let declares an `i` not just for the for loop itself, but it redeclares a new `i` for each iteration of the loop. That means that closures created inside the loop iteration close over those per-iteration variables the way you wouldd expect.[^1]
 
-The `for` shorthand can obscure some of this, but here's an equivalent to a `let` in a `for` header.
+The `for` shorthand can obscure some of this, but here is an equivalent to a `let` in a `for` header.
 
 ```js
 var funcs = [];
@@ -5357,14 +5357,14 @@ This code will now work without manual binding, which is convenient.
 ```js
 var person = {
   age: 29,
-  intro: () => { console.log('I'm' + this.age) }
+  intro: () => { console.log("I'm" + this.age) }
 };
 
 var intro = person.intro()
 intro() // 'I'm 29'
 ```
 
-**When it's not helpful**
+**When it is not helpful**
 
 Watch out when using this with something like jQuery - you may lose jQuery `this` or the current element in an event handler.
 
@@ -5476,7 +5476,7 @@ async function() {
 
 ### Running babel from the command line
 
-Based off an existing repo's package.json, but it should work.
+Based off an existing repo's `package.json`, but it should work.
 
 First install `babel-cli` npm module, and then you should be able to execute babel through the node modules.
 
@@ -5512,10 +5512,63 @@ Notes:
 Instead of using `airbnb-base/legacy` you might be able to use this package, but I haven't tried it:
 https://www.npmjs.com/package/eslint-config-airbnb-es5
 
-P.S
+**Library syntax errors**
 
-Make sure your tests are specified in the env option:
+Make sure your tests are specified in the env option. Same goes if you're using something like jQuery.
 https://github.com/tlvince/eslint-plugin-jasmine/issues/56
+
+**CLI**
+
+Once you've done all of the above, you can also use ESLint as a CLI if you wish. Here's how you'd do that
+in the context of your local directory/project.
+
+`./node_modules/.bin/eslint yourfile.js`
+
+https://eslint.org/docs/user-guide/getting-started#local-installation-and-usage
+
+You could also do a global install, but then you'd also have to do a global install of `eslint-config-airbnb`, and following that pattern  could get messy as you switched global ESLint configs over time and across projects.
+
+### Functional ideas
+
+#### Avoiding reassigning params (even with accumulators)
+
+Many ESLint setups [flag](https://eslint.org/docs/rules/no-param-reassignhttps://eslint.org/docs/rules/no-param-reassign) param reassignment and mutation (modifying object internals). This issue even comes up when you [using reduce](https://github.com/eslint/eslint/issues/8581), which IMO isn't a big issue. The problem is that ESLint has no way to recognize the reduce accumulator param as something safe to mutate.
+
+Say you had an `inputs` variable that looked like this:
+
+```js
+[
+  0 : {name: "progress", value: "0.0"},
+  1 : {name: "level", value: "2"}
+]
+```
+
+and you wanted to turn it into object whether the "name" value's key was "values" value. I.e
+
+```js
+[ { "progress": "0.0" }, ... ]
+```
+
+This is how you'd normally do this with reduce, but ESLint doesn't like the param re-assignment that's happening (again, as an accumulator it's probably a pretty safe object to mutate).
+
+```js
+return inputs.reduce((formObject, item) => {
+  formObject[item.name] = item.value; // eslint-disable-line no-param-reassign
+  return formObject;
+}, {});
+```
+
+What you can do instead is return a new accumulator each time.
+
+```js
+return inputs.reduce((formObject, item) => (
+  { ...formObject, [item.name]: item.value }
+), {});
+```
+
+Note the need for brackets when setting the key.
+
+https://github.com/airbnb/javascript/issues/1342
 
 ## Node
 
