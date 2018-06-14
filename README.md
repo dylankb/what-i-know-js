@@ -415,7 +415,7 @@ In the examples above, `Referrence Error` happens because `a` and `b` are not in
 
 An integer can serve as an object key, but you cannot use it with the object dot notation. From the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Property_accessors#Dot_notation)
 
-> [To use dot notation], the property must be a valid JavaScript identifier, i.e. a sequence of alphanumerical characters, also including the underscore ("_") and dollar sign ("$"), that cannot start with a number. For example, `object.$1` is valid, while `object.1` is not.
+> To use dot notation, the property must be a valid JavaScript identifier, i.e. a sequence of alphanumerical characters, also including the underscore (`_`) and dollar sign (`$`), that cannot start with a number. For example, `object.$1` is valid, while `object.1` is not.
 
 ```js
 // continued
@@ -439,9 +439,9 @@ lead.name       // "Me"
 Or if you need to return an array or make access the current index in a callback
 
 ```js
-  Object.keys(obj).map(function(key, index) {
-    obj[key] = ... ;
- }
+Object.keys(obj).map(function(key, index) {
+  obj[key] = ... ;
+});
 ```
 
 ## Falsiness
@@ -654,7 +654,7 @@ window.foo;       // 1
 ```js
 function bar() {
   return 1;
-end
+}
 
 window.bar;       // function bar() { return 1; }
 ```
@@ -665,8 +665,8 @@ Read the code and the comments below and try to figure out the answer.
 
 ```js
 function help() {
-  return a;         // This line returns undefined. Shouldn't it return a ReferenceError. Why is that?
-  var a = "Help!";  // If you comment this code out, this function returns 123 instead of undefined.  Why?
+  return a;        // This line returns undefined. Shouldn't it return a ReferenceError. Why is that?
+  var a = "Help!"; // If you comment this code out, this function returns 123 instead of undefined.  Why?
 }
 
 var a = 123;  // undefined
@@ -1149,7 +1149,7 @@ $(function() {
     console.log($inputs);
   }
   ...
-}
+});
 // [Object, Object, Object, ... ]
 ```
 
@@ -1192,7 +1192,6 @@ As with many JS mysteries, the answer is revealed in the [MDN documentation on r
 > `arr.reduce(callback, [initialValue])`
 
 > The first time the callback is called, accumulator and currentValue can be one of two values. If initialValue is provided in the call to reduce, then accumulator will be equal to initialValue and currentValue will be equal to the first value in the array. If _no_ initialValue was provided, then *accumulator will be equal to the first value* in the array and *currentValue will be equal to the second*.
-```
 
 So we fell for the trap of assuming our accumulator was one thing ( an empty object) when it was actually another the first object (the `startX` key-value pair) in our collection. To correct this issue we simply supply an empty object as the initial value.
 
@@ -1252,6 +1251,7 @@ var = {
  start: function () {
    this.started = true;
  }
+};
 ```
 
 ### Cloning / copying objects
@@ -1290,7 +1290,7 @@ array     // [{ 'a': 1 }]
 
 How do we make this code work? It depends on how we create (clone or duplicated) `new_array`. We could try these two ways
 
-```
+```js
 var new_array= array.slice(0);                     
 new_array[0]['a'] = 2
 array // [{ 'a': 2 }]
@@ -1298,15 +1298,15 @@ array // [{ 'a': 2 }]
 
 But this doesn't work. Here's a similar method
 
-```
+```js
 var new_array = Array.prototype.slice.apply(array)
 new_array[0]['a'] = 2
 array // [{ 'a': 2 }]
 ```
 
-These both copy references so they won't work. The same thing will happend with `Object.assign([], array)`. What does work is using JSON.
+These both copy references so they won't work. The same thing will happened with `Object.assign([], array)`. What does work is using JSON.
 
-```
+```js
 var new_array = JSON.parse(JSON.stringify(array))
 new_array[0]['a'] = 2
 array // [{ 'a': 1 }]
@@ -1316,7 +1316,7 @@ array // [{ 'a': 1 }]
 
 The splat operator replaces apply, so we could try using that one as well. `let new_array = [...array]`. However, it too copies references.
 
-```
+```js
 new_array[0]['a'] = 2
 array // [{ 'a': 2 }]
 ```
@@ -1750,17 +1750,20 @@ Object.getPrototypeOf(pippin) === Dog.prototype              // true
 If we wanted to share the behavior of `Dog` with `Poodle`, you could manually set the constructor (prototype?).
 
 ```js
+function Dog () {}
+
 function Poodle () {}
 Poodle.prototype = Object.create(Dog.prototype); // Worse, but also new Dog();
 Poodle.prototype.type = "Poodle";
 
 var poodle = new Poodle();
-poodle instanceof Dog     // true
-poodle instanceof Poodle  // true
+console.log(poodle instanceof Dog);     // true
+console.log(poodle instanceof Poodle);  // true
 
-poodle.constructor === function Dog(...);           // true
+poodle.constructor;                                 // f Dog() {}
+poodle.constructor === Dog;                         // false - should be true?
 Object.getPrototypeOf(poodle) === Poodle.prototype; // true
-Dog.prototype.isPrototypeOf(poodle)                 // true
+Dog.prototype.isPrototypeOf(poodle);                // true
 ```
 
 The `Poodle` prototype is an instance of `Dog`, so `poodle` is linked to `Dog` on the prototype inheritance chain.
@@ -2055,8 +2058,8 @@ The same example, except using `apply`
 printLine.apply(kindle, [2, '.']);
 ```
 
-**Call**: **C**ount the **C**ommas (you have to count the number of arguments to match the called function)  
-**Apply**: **A**rguments as **A**rray
+**Call**: Count the Commas (you have to count the number of arguments to match the called function)  
+**Apply**: Arguments as Array
 
 `apply` can reduce the length of function parameters by organizing them into an array
 
@@ -2362,7 +2365,6 @@ obj.foo();
 
 ### Similar problem: Outer Function Referenced By Object Method Lacks Context
 
-
 ```js
 function logThis() {
   console.log(this);
@@ -2635,7 +2637,7 @@ function makeObj() {
 }
 ```
 
-Upper (or parent) scopes and available to lower (nested) scopes.
+Variables in upper (or parent) scopes are available to lower (nested) scopes.
 
 Objects within functions have the same scope as the function are they are in.
 
@@ -2693,9 +2695,12 @@ logCount();            // closure sees new value for count; logs: 2
 
 ```js
 function createAdder() {
-  let value = 0;  const add = (amount) => (value = value + amount);
-  const getValue = () => (value);  return {
-    add,    getValue,
+  let value = 0;
+  const add = (amount) => (value = value + amount);
+  const getValue = () => (value);
+  return {
+    add,
+    getValue,
   }}
 ```
 
@@ -4511,7 +4516,7 @@ This uses one event listener that checks for anchor clicks
 Open external links in a new window
 
 ```js
-$( "#list" ).on( "click", "a[href^='http']", function( event ) {
+$("#list" ).on( "click", "a[href^='http']", function( event ) {
     $( this ).attr( "target", "_blank" );
 });
 ```
@@ -4530,7 +4535,7 @@ You may have multiple click events bound to an element, but you only want one of
     $(this).off("click");
   });
 
-  $("#namespaced").on('click", highlight);
+  $("#namespaced").on("click", highlight);
 ```
 
 However you can use namespacing to only remove certain events. Below, the `alert` event will now only fire once and the `highlight` functionality will remain
@@ -4550,7 +4555,7 @@ $("#namespaced").on("click.alert" ...
   $(this).off(".alert");
 ```
 
-If you didn't want to use namespacing at all you could also could specify the handler using the event from the callback
+If you did not want to use namespacing at all you could also could specify the handler using the event from the callback
 
 ```js
   $("#namespaced").on("click", function(e) {
@@ -4791,7 +4796,7 @@ Use the `.attr()` method. As a setter method, `attr()` will change the HTML mark
 Note how `attr()` require a bit more verbose syntax.
 
 ```js
-<a href="#"' data-block="gold">Gold Sponsors</a>
+<a href="#" data-block="gold">Gold Sponsors</a>
 var $a = $('a[data-block=gold]');
 
 console.log($a.attr('data-block')); // gold
@@ -5092,7 +5097,7 @@ let a = 5;
 let objA = { a };
 ```
 
-### Splat operator
+### Splat/spread operator
 
 #### Combining / Gathering
 
@@ -5118,7 +5123,11 @@ The spread operator iterates over the properties in `objA` and `objB` and assign
 This is a useful tool in writing pure functions
 
 ```
-const oldThread = state.threads[threadIndex]; const newThread = {      ...oldThread,      messages: oldThread.messages.concat(newMessage),    };
+const oldThread = state.threads[threadIndex];
+const newThread = {
+  ...oldThread,
+  messages: oldThread.messages.concat(newMessage),    
+};
 ```
 
 - `...oldThread` copies all of the properties from `oldThread` to `newThread`:
@@ -5135,7 +5144,7 @@ let c = Object.assign( {}, objA, objB);
 
 **Copy + Overwrite**
 
-We can do the same thing in the ES6 example with assign.
+We can do the same thing in the ES6 example with `Object.assign`.
 
 ```js
 Object.assign({}, oldThread, {  messages: oldThread.messages.concat(newMessage),});
