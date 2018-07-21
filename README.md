@@ -382,6 +382,8 @@ The difference here is that a remainder is using `trunc` and a modulo would use 
 
 **Removing a value**
 
+`splice(index_of_first_value_to_remove, index_following_last_value_to_remove)`
+
 ```js
 var arr = [0,1,2];
 arr.splice(0,1)   // 0
@@ -838,7 +840,9 @@ hippityHoppity();
 console.log(bunnyName); // "Flopsy"
 ```
 
-Also, there needs to be an outer variable reference for the function scoped variable
+This is an example of JS's "pass by value" property in action. Passing variable `bunnyName` binds its value to the local variable `bunnyName` variable inside `hippityHoppity` function scope. Therefore reassignment doesn't affect the outer variable because they just reference the same value (not reference).
+
+If you do want to make use of the global/nesting scope behavior, there needs to be an outer variable reference for the function scoped variable
 
 ```js
 function hippityHoppity(bunnyName) {
@@ -849,7 +853,7 @@ hippityHoppity();
 console.log(bunnyName); // Uncaught Reference Error
 ```
 
-There rules are a bit different if you're passing in an object. JS is pass by value, but when passing in objects (i.e arrays) the value is the reference
+The rules are a bit different if you're passing in an object. JS is pass by value, but when passing in objects (i.e arrays) the value is the reference
 
 ```js
 var bunnyNames = ["Flopsy", "Mopsy"];
