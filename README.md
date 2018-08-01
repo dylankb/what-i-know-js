@@ -2090,7 +2090,7 @@ Math.max.apply(this, numbers)
 
 ES6 version would simply be:
 
-```
+```js
 Math.max(...numbers)
 ```
 
@@ -3385,7 +3385,7 @@ Element Insertion Method | Description
 
 **position**
 
-``position` must be one of the following String values:
+`position` must be one of the following String values:
 
 Position	| Description
 ----------|------------
@@ -3687,7 +3687,7 @@ Property| Writable | Default Value |	Description |
 Example:
 
 ```js
-$('window').on('popstate', function(e) {
+ // $('windows').on('popstate', function(e) { // Commented out due to markdown syntax problem https://github.com/atom/language-gfm/issues/21#issuecomment-299510304
   var state = e.originalEvent.state;
 
   if (location.hash) { switchPage(location.hash) }
@@ -3859,7 +3859,7 @@ Add other attribute | `$element.attr("alt", "string")` | `element.setAttribute('
 Remove attribute | `$element.removeAttr("style")` | `element.removeAttribute("style")`
 Get class | `$element.attr('class')` | `element.getAttribute("class")`
 Get text  | `$element.text()` | `element.innerHTML`/`textContent`/`innerText`
-On submit | `$form.on("submit", function(e) {` | `form.onsubmit = function(e) {`
+On submit | `$form.on("submit", function(e) { | form.onsubmit = function(e) {`
 Get value | `$element.val()` | `element.value`
 
 **Accessing jQuery vs. DOM objects**
@@ -4001,7 +4001,7 @@ Index of `p.child` tag compared to all other `p` tags in the document
 
 ```js
 var $firstP = $('div.parent').find('p').eq(0); // Get first p tag in .parent - p.child
-`$first.index() // => 1
+$first.index() // => 1
 ```
 
 Index of `p` tag in relation to all siblings (`span`, etc.)
@@ -4170,7 +4170,7 @@ Example below sets element `top` value to current screen position + `30px`
 ```js
 $ele.css({
   top: $(window).scrollTop() + 30
-)}
+})
 ```
 
 #### `prepend()` vs. `prependTo()`
@@ -4211,12 +4211,13 @@ ele + ele { display: none }
 On click, hide all tabs and display the one you clicked on
 
 ```js
-  $('parent').on('click', 'a', function(e) {
+  //$('parent').on('click', 'a', function(e) { // Commented out because of problem w/ syntax highlighting https://github.com/atom/language-gfm/issues/21#issuecomment-299510304
     e.preventDefault();
     var $e = $(e.target),
         idx = $e.attr('href');
 
     $('ele').hide().filter(idx).show();
+  }
 ```
 
 You might also want to toggle the active class
@@ -4397,9 +4398,9 @@ Dynamically creating new elements with jQuery can cause a problem when the newly
 ```js
 function highlight() { ... }
 
-`$('.simple a').on("click", highlight)`;
+  $('.simple a').on("click", highlight);
 
-`$('.simple').filter("a").clone().appendTo($('#clone"));
+  $('.simple').filter("a").clone().appendTo($("#clone"));
 }
 ```
 
@@ -4446,7 +4447,7 @@ Typically, `e.currentTarget` his property will be equal to the `this` of the fun
 ```js
   like: function(e) {
     e.preventDefault();
-    $.ajax({
+    // $.ajax({ // Commented out because of problem w/ syntax highlighting https://github.com/atom/language-gfm/issues/21#issuecomment-299510304
       url: "/photos/like",
       type: "POST",
       context: this,
@@ -4459,7 +4460,7 @@ Typically, `e.currentTarget` his property will be equal to the `this` of the fun
   },
   favorite: function(e) {
     e.preventDefault();
-    $.ajax({
+    // $.ajax({
       url: "/photos/favorite",
       type: "POST",
       ...
@@ -4468,9 +4469,9 @@ Typically, `e.currentTarget` his property will be equal to the `this` of the fun
 ```js
 get: function(e) {
       e.preventDefault();
-      var $e = $(e.target);
+      //var $e = $(e.target); // Commented out because of problem w/ syntax highlighting https://github.com/atom/language-gfm/issues/21#issuecomment-299510304
 
-      $.ajax({
+      // $.ajax({
         url: $e.attr("href"),
         type: "POST",
         data: "photo_id=" + $e.attr("data-id"),
@@ -4554,7 +4555,7 @@ $("#namespaced").on("click.alert", function(e) {
 If you wanted to remove mutliple different events with the same namespace, you could leave off the event type
 
 ```js
-$("#namespaced").on("click.alert" ...
+// $("#namespaced").on("click.alert" ... // Commented out because of problem w/ syntax highlighting https://github.com/atom/language-gfm/issues/21#issuecomment-299510304
   ...    
   $(this).off(".alert");
 ```
@@ -4579,7 +4580,7 @@ It's often a good idea to remove previously bound events when creating new ones
 It's common to want to stop the click event action from happening
 
 ```js
-$('a').on('click', function(e) {
+// $('a').on('click', function(e) { // Commented out because of problem w/ syntax highlighting https://github.com/atom/language-gfm/issues/21#issuecomment-299510304
   e.preventDefault();
 ```
 
@@ -4651,7 +4652,7 @@ Say you have a `comments` object with a method `getCommentsFor` that returns the
 ```js
 var comments = {
     getCommentsFor: function(id) {
-      $.ajax({
+      // $.ajax({ // Commented out because of problem w/ syntax highlighting https://github.com/atom/language-gfm/issues/21#issuecomment-299510304
         url: "/comments",
         data: "photo_id=" + id,
         context: this,
@@ -4885,7 +4886,7 @@ $('#list').html(itemsTemplate({ items: products }))
 ```js
 // /test.js
 ...
-Handlebars.registerPartial('basicTemplate, $('#basicTemplate').html());
+// Handlebars.registerPartial('basicTemplate, $('#basicTemplate').html()); // Commented out because of problem w/ syntax highlighting https://github.com/atom/language-gfm/issues/21#issuecomment-299510304
 $('#list').html(itemsTemplate({ items: products }));
 ```
 
@@ -4999,7 +5000,7 @@ $(window).on("unload", function() {
 
 `let` instantiates block scoped variables
 
-```
+```js
 let a = 2;
 {
   let a = 3;
@@ -5182,7 +5183,7 @@ const { model } = car; // const model = car.model;
 model; // 'Ford'
 ```
 
-```
+```js
 let tenses = ["I", "you", "me"]
 let [ firstPerson, secondPerson ] = tenses;
 firstPerson // "I"
@@ -5263,7 +5264,7 @@ Now we can leave off the options object if we want.
 
 ```js
 Albums.set(albums, { explodeBomb: true });
-Albums.set(albums, { {initializeFooToOne: true });
+// Albums.set(albums, { {initializeFooToOne: true }); // Commented out because of problem w/ syntax highlighting https://github.com/atom/language-gfm/issues/21#issuecomment-299510304
 Albums.set(albums);
 ```
 
@@ -5324,7 +5325,7 @@ moreNums = [...largerNums]
 Example of equivalent functions
 
 ```js
-do.something(function(a, b) { return a + b; } // ES5
+// do.something(function(a, b) { return a + b; } // ES5 - Commented out because of problem w/ syntax highlighting https://github.com/atom/language-gfm/issues/21#issuecomment-299510304
 do.something((a,b) => { return a + b; }) // ES6 - no function
 do.something((a,b) => (a + b))           // ES6 - implicit return
 do.something((a,b) => a + b)             // ES6 - minimum parens
@@ -5344,7 +5345,7 @@ Single argument functions can be made even terser.
 ```js
 [0,2,4].map((a) => { return ++a });  // ES6
 [0,2,4].map(a => { return ++a });    // ES6 w/out extra parens
-[0,2,4].map((a) => (++a);            // ES6 w/out return statment
+// [0,2,4].map((a) => (++a);            // ES6 w/out return statment // Commented out because of problem w/ syntax highlighting https://github.com/atom/language-gfm/issues/21#issuecomment-299510304
 [0,2,4].map(a => ++a)                // ES6 single arg shorthand
 ```
 
@@ -5353,8 +5354,8 @@ Here's a nested loop example as well.
 ```js
 let arrays = [[1,2],[3,4]];
 // ES5
-arrays.forEach(function(nums) {
-  nums.forEach(function(num) {
+// arrays.forEach(function(nums) { // Commented out because of problem w/ syntax highlighting https://github.com/atom/language-gfm/issues/21#issuecomment-299510304
+  // nums.forEach(function(num) {
     console.log(num);
   }
 }
@@ -5423,7 +5424,7 @@ var child = new Child();
 child.baz()
 ```
 
-```
+```js
 class Bar extends Foo {
   constructor(props) {
     super(props)
