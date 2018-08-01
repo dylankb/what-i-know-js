@@ -5108,6 +5108,8 @@ let objA = { a };
 
 #### Objects
 
+##### Copying objects
+
 1) spread operator
 
 **Copy objects**
@@ -5280,6 +5282,20 @@ Rest gathers individual elements together into an array
 const aTail = (head, ...tail) => tail;
 aTail(1, 2, 3); // [2, 3]
 ```
+
+This is useful for removing elements
+
+```js
+const myObject = {
+  a: 1,
+  b: 2,
+  c: 3
+};
+const { a, ...noA } = myObject;
+console.log(noA); // => { b: 2, c: 3 }
+```
+
+https://codeburst.io/use-es2015-object-rest-operator-to-omit-properties-38a3ecffe90
 
 ### Spread
 
