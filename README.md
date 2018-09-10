@@ -751,17 +751,16 @@ The fact that join is defined as`Array.prototype.join` means that `join` is a me
 
 _Function Definition_
 
-??
+If a method is assigned in function expression, when it's invoked it counts as a function declaration.
 
 ```js
-function () {
- console.log("hi")
-}
+var otherFunction = obj.myFunction;
+otherFunction();     // function invocation
 ```
 
 **Return value**
 
-Functions without a `return` statement return `undefined`
+Functions without a `return` statement return `undefined`.
 
 ### Function parameters
 
@@ -866,7 +865,7 @@ hippityHoppity();
 console.log(bunnyNames); // "[BUNSTER, Mopsy]"
 ```
 
-### function scope and params
+### Function scope and params
 
 **Primitives:** are passed in as **reference-by-value** - the function does not modify the passed in object.
 
@@ -903,10 +902,13 @@ var foo = new Foo();
 
 a               // 1
 foo.bar();      // 2
+foo.a           // 2
+a               // 1
 Foo();          // 2
 a               // 2
 
 obj = {};
+obj.bar();      // UndefinedMethod
 Foo.call(obj);  // 2
 obj.bar();      // 2
 ```
@@ -1065,8 +1067,8 @@ It's not possible in a vanilla JS `forEach` callback.
 
 ```js
 [1,2,3].forEach(function(v) {
-	console.log(v);
-	if (v === 2) {
+  console.log(v);
+  if (v === 2) {
     return false;
   }
 });
@@ -1075,23 +1077,23 @@ It's not possible in a vanilla JS `forEach` callback.
 // 3
 ```
 
-If it was, the code would never have reached `3`. The reason this is is because a new function is created. This isn't necessaryily the case though for JS library's like jQuery or lodash. Read more [here](https://webapplog.com/breaking-bad-loops-in-javascript-libraries/).
+If it was, the code would never have reached `3`. The reason this is is because a new function is invoked in each iteration. This isn't necessarily the case though for JS library's like jQuery or lodash. Read more [here](https://webapplog.com/breaking-bad-loops-in-javascript-libraries/).
 
 ### IIFE
 
-Immediately invocated function expressions
+Immediately-Invoked Function Expressions
 
 Useful for creating your own private scope. For example, say you need to do a for loop in a messy piece of code where `i` or the name of the function might be defined already.
 
 ```js
-function() {
+(function() {
   for(var i=0; i<100; i++) {
     console.log(i);
   }
-})():
+})();
 ```
 
-They don't have to be only function delcaration styles. Here's a simple example using a function expression and a parameter:
+IIFE don't have to use the function declaration style. Here's a simple example using a function expression and a parameter:
 
 ```js
 var message = (function(name) {  
@@ -1189,9 +1191,9 @@ Reduce returns an accumulator, which is be default the object that calls reduce 
 { endX : "3",  endY : "4", name : "startX", startY : "2", value : "1" }
 ```
 
-But wait... why is `startX` instead `name`. Instead 1 existing as the value pair to `startX`, it's instead exists as it's own pair with `value` as the key. What's going on here?
+But wait... why is `startX` a value instead of a key? Also, instead of 1 being the value pair to the `startX`, 1 is the value to key `value`. What's going on here?
 
-As with many JS mysteries, the answer is revealed in the [MDN documentation on reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce).
+As with many JS mysteries, the answer is revealed in the MDN documentation. In this example, it helped to look and what they wrote [on reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce).
 
 > `arr.reduce(callback, [initialValue])`
 
@@ -1214,15 +1216,9 @@ console.log(formObject);
 // { endX : "3", endY : "4", startX: "1", startY : "2" }
 ```
 
-### Pure functions
-
-**Pure functions** - a Function that doesn't cause any side effects when it is invoked
-
-Functions can modify values outside of them, either by accessing variables defined in outer scopes or by mutating objects that were passed to the function as an argument.
-
 ### Meta-programming functions
 
-An example of how you would iterativelly create a number of methods on a specific object
+An example of how you would iteratively create a number of methods on a specific object
 
 ```js
 var _ = function(element) {
@@ -1248,7 +1244,7 @@ _.isBoolean(false) // true
 * is used to access properties defined on objects from inside that object
 
 ```js
-var = {
+var car = {
  make: "Fiat",
  started: false,
 
@@ -1287,32 +1283,34 @@ Cloning deeply nested objects is a bit trickier.
 object = { 'a': 1 };
 array = [object];
 
-new_array[0]['a'] = 2
-new_array // [{ 'a': 2 }]
+newArray[0]['a'] = 2
+newArray // [{ 'a': 2 }]
 array     // [{ 'a': 1 }]
 ```
 
-How do we make this code work? It depends on how we create (clone or duplicated) `new_array`. We could try these two ways
+How do we make this code work? It depends on how we create (or rather, clone/duplicate) `newArray`. We could try these two ways
 
 ```js
-var new_array= array.slice(0);                     
-new_array[0]['a'] = 2
+var newArray = array.slice(0);
+newArray[0]['a'] = 2
 array // [{ 'a': 2 }]
 ```
 
 But this doesn't work. Here's a similar method
 
 ```js
-var new_array = Array.prototype.slice.apply(array)
-new_array[0]['a'] = 2
+var newArray = Array.prototype.slice.apply(array)
+newArray[0]['a'] = 2
 array // [{ 'a': 2 }]
 ```
 
 These both copy references so they won't work. The same thing will happened with `Object.assign([], array)`. What does work is using JSON.
 
+**JSON deep object cloning**
+
 ```js
-var new_array = JSON.parse(JSON.stringify(array))
-new_array[0]['a'] = 2
+var newArray = JSON.parse(JSON.stringify(array))
+newArray[0]['a'] = 2
 array // [{ 'a': 1 }]
 ```
 
@@ -1474,7 +1472,7 @@ var a = new Foo();
 * `a` object is the prototype object of the `Foo` object OR
 * object `a` is created with object `Foo` as its prototype
 
-Using a constructor changes the returned object's prototype to the constructor functions own prototype
+Using a constructor changes the returned object's prototype to the constructor function's own prototype
 
 We'll use `Object.isPrototypeOf(obj)` - which returns the prototype of object - to test that hypothesis
 
@@ -1790,13 +1788,13 @@ If you you start adding functions onto `Poodle.protoype` you'll be modifying `Do
 
 **Be careful of `Obj.prototype` = `new AnotherObj()`**
 
-`Poodle.prototype` = `new Dog()` creates a separate, linked object but may execute unplanned code or delegate certain properties that you don't want attached.
+`Poodle.prototype = new Dog()` creates a separate, linked object but may execute unplanned code or delegate certain properties that you don't want attached.
 
 **Using `Object.create`**
 
-`Poodle.prototype = Object.create(Dog.protype` is a good way to go
+`Poodle.prototype = Object.create(Dog.prototype)` is a good way to go
 
-Using `Object.create` "make a new 'Poodle dot prototype' object that's linked to 'Foo dot prototype'."
+Using `Object.create` "make[s] a new 'Poodle dot prototype' object that's linked to 'Foo dot prototype'."
 
 **Use `Object.setPrototypeOf` in ES6**
 
@@ -2065,7 +2063,9 @@ printLine.apply(kindle, [2, '.']);
 **Call**: Count the Commas (you have to count the number of arguments to match the called function)  
 **Apply**: Arguments as Array
 
-`apply` can reduce the length of function parameters by organizing them into an array
+`apply` can reduce the length of function parameters by organizing them into an array.
+
+`null` or `undefined` work for the `thisArg` when we don't have a specific object context to supply.
 
 ```js
 function add (a, b, c, d, e, f, g, h, i) {
@@ -2075,6 +2075,7 @@ var nums = [1,2,3,4,5,6,7,8,9];
 
 console.log(add.apply(this, nums));             // 45
 console.log(add.call(this, 1,2,3,4,5,6,7,8,9)); // 45
+console.log(add.call(null, 1,2,3,4,5,6,7,8,9)); // 45
 ```
 
 Here's a more realistic example with `Math.max`, which expects arguments of number like `Math.max(10,20)`
@@ -2088,7 +2089,7 @@ Math.max.apply(this, numbers)
 => 3
 ```
 
-ES6 version would simply be:
+ES6 version using the spread operator `...`would simply be:
 
 ```js
 Math.max(...numbers)
@@ -2096,7 +2097,7 @@ Math.max(...numbers)
 
 **`bind`**
 
-`bind` permenantly binds the execution context so it cannot be reassigned
+`bind` permanently binds the execution context so it cannot be reassigned
 
 ```js
 var a = 'goodbye';
@@ -2639,6 +2640,9 @@ function makeObj() {
     },
   }
 }
+
+makeObj().returnA();  // 0
+makeObj().returnB();  // 1
 ```
 
 Variables in upper (or parent) scopes are available to lower (nested) scopes.
@@ -2767,7 +2771,7 @@ getValueFun();                  // "008"
 
 Here `getSecret();` returns a reference to the `getValue` function so it can be executed later.
 
-Returning an anonymous function would work fine here as well
+Returning an anonymous function could work fine here as well
 
 ```js
 var secret = "007";
@@ -2776,11 +2780,13 @@ function getSecret() {
   var secret = "008";
 
   function getValue() { return secret; }
-  return getValue;   // Note lack of parens - getValue was not invoked
+  return function() { return getValue(); }
 }
 var getValueFun = getSecret();
 getValueFun();                  // "008"
 ```
+
+**Improving `getSecret`**
 
 What if you wanted to add a `reveal` method, and add a better user interface too?
 
@@ -2832,7 +2838,7 @@ function getSecret() {
 var secret = getSecret();
 secret.reveal();                  // "008"
 secret.set('005');
-secret.reveal();
+secret.reveal();                  // "005"
 ```
 
 b) Return an anonymous function which returns a value
@@ -2885,16 +2891,6 @@ makeCounter() // TypeError makeCounter is not a function
 ```
 
 However this returns a value, not a function.
-
-If you're unsure of the safety of naming a function, immediately executing is a safe way.
-
-```js
-(function(number) {
-  for (var i = 0; i < number; i++) {
-    console.log(i);
-  }
-})(100);
-```
 
 ### Closures, callbacks & additional arguments
 
@@ -3440,7 +3436,7 @@ Setting up an event listener
 
 **GlobalEventHandler**
 
-```js
+```html
 <button onclick="console.log('clicked', event)">
   Click me
 </button>
@@ -3448,11 +3444,14 @@ Setting up an event listener
 Notes:
 
 - You must refer to the event as `event`. Passing in an `e` will not work.
-- You can also technically pass in `this` to grab the target element, but `event.target` is probably more standary
-- You can also use an IIFE     
+- You can also technically pass in `this` to grab the target element, but `event.target` is probably more standard
+- You can also use an IIFE (but it still need to use `event`)     
 
-```js
-<button onclick="(function(e) { console.log(event); })()">
+```html
+<button onclick="(function(that) {
+  console.log(event.target);          // <button onClick="(function) { ... }"
+  console.log(that === event.target); // true
+  })(this)">
   Click me
 </button>
 ```
@@ -3471,7 +3470,7 @@ Event listeners must be removed according to the approach by which they were add
 
 **addEventListener**
 
-For event listeners registered with addEventListener, the DOM node method removeEventListener must be used:
+For event listeners registered with `addEventListener`, the DOM node method `removeEventListener` must be used:
 
 `eventTarget.removeEventListener(eventType, eventHandler);`
 
@@ -3479,11 +3478,11 @@ Following this pattern, we would remove the event listener we set above as follo
 
 `document.removeEventListener('click', handler);`
 
-It's important to note that, because handler must refer to the same Function object used when it was registered, an event listener added with an anonymous function expression cannot be removed with removeEventListener.
+It's important to note that, because handler must refer to the same Function object used when it was registered, an event listener added with an anonymous function expression cannot be removed with `removeEventListener`.
 
 **GlobalEventHandler**
 
-The object-property style of GlobalEventHandler makes removing an event listener added with this approach somewhat easier: simply set the desired eventProperty to undefined.
+The object-property style of GlobalEventHandler makes removing an event listener added with this approach somewhat easier: simply set the desired eventProperty to `undefined`.
 
 `eventTarget.eventProperty = undefined;`
 
@@ -5327,10 +5326,10 @@ let nums = [1,2]
 
 **Cloning**
 
-This technique is also useful for cloning:
+This technique is also useful for shallow cloning:
 
 ```js
-moreNums = [...largerNums]
+const moreNums = [...largerNums];
 // [2,3]
 ```
 
@@ -5338,7 +5337,7 @@ moreNums = [...largerNums]
 
 #### Abbreviated function syntax
 
-Example of equivalent functions
+Example of equivalent method calls
 
 ```js
 // do.something(function(a, b) { return a + b; } // ES5 - Commented out because of problem w/ syntax highlighting https://github.com/atom/language-gfm/issues/21#issuecomment-299510304
@@ -5347,7 +5346,7 @@ do.something((a,b) => (a + b))           // ES6 - implicit return
 do.something((a,b) => a + b)             // ES6 - minimum parens
 ```
 
-Equivalent example
+More equivalent examples
 
 ```js
 [5,6].map(function(num, index) { return num + index }); // ES5
@@ -5396,7 +5395,7 @@ intro() // 'I'm 29'
 
 **When it is not helpful**
 
-Watch out when using this with something like jQuery - you may lose jQuery `this` or the current element in an event handler.
+Watch out when using the arrow syntax with something like jQuery - you may lose jQuery `this` or the current element in an event handler.
 
 ### Classes
 
@@ -5524,18 +5523,15 @@ Basically make sure you're:
 
 1. Installing `eslint-config-airbnb-base`
 2. Extending `airbnb-base/legacy` in your `.eslintrc`
-3. Install package dependencies and the package itself with this fancy bash script:
+3. Install package dependencies and the package itself like so with Node 5+:
 
 ```bash
-export PKG=eslint-config-airbnb-base;
-npm info "$PKG" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "$PKG"
+npx install-peerdeps --dev eslint-config-airbnb
 ```
 
-Bash script lifted from [this blog post](http://www.acuriousanimal.com/2016/08/14/configuring-atom-with-eslint.html).
+Other options and additional details at [eslint-config-airbnb npm installation instructions](https://www.npmjs.com/package/eslint-config-airbnb).
 
-If you don't want to run the command then npm installing `eslint`, `eslint-plugin-import`, and then `eslint-config-airbnb-base` should work.
-
-4. Install linter-eslint for Atom.
+4. Install `linter-eslint` for Atom.
 
 Notes:
 
