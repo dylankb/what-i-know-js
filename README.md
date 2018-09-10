@@ -1104,11 +1104,38 @@ console.log(message) // => 'Hello World!'
 
 The first pair of parenthesis in `(function(name) {...})` is an expression that evaluates to a function object. The second pair of parenthesis is the name parameter's argument `'World'`.
 
-If a method is assigned in function declaration, when it's invoked it counts as a function declaration.
+**Wrapping parens**
+
+It would seem like you wouldn't need always need wrapping parens as these two expression both return function objects.
 
 ```js
-var otherFunction = obj.myFunction;  
-otherFunction();     // function invocation
+var func = function() { console.log('Hi'); }   // [Function: fun]
+var funct = (function() { console.log('Hi'); }) // [Function: funt]
+```
+
+However, when dealing with function declarations we need to pay attention to the wrapping parens. A clue to why we need wrapping parens is from looking at the return values from a function declaration vs. a function expression.
+
+```js
+(function() {
+  for(var i=0; i<100; i++) {
+    console.log(i);
+  }
+});
+// => [Function]
+```
+```js
+function() {
+  for(var i=0; i<100; i++) {
+    console.log(i);
+  }
+};
+// => undefined
+```
+
+When assigned in a function expression as above, there is a return value (this strikes me as a little odd that declarations don't by default, but oh well), so we can avoid wrapping parens if we use a variable assignment to a function expression.
+
+```js
+var func = function() { console.log('Hi'); }()   // Hi
 ```
 
 ### Callbacks
@@ -1258,21 +1285,21 @@ var car = {
 
 #### Shallow copies
 
-Getting code like this to work isn't too hard
+Making safe copies of objects code is fairly straightforward.
 
 ```js
 object = { 'a': 1 };
+newObject = Object.assign({}, first); //
 
-new_object['a'] = 2;
-new_object  // { 'a': 2 }
+newObject['a'] = 2;
+newObject  // { 'a': 2 }
 object      // { 'a' : 1 }
 ```
 
 Here are the ways we could create `new_object` to accomplish this:
 
 ```js
-new_object = Object.create(first);
-new_object = Object.assign({}, first);
+newObject = Object.create(first);
 ```
 
 #### Deep nesting
@@ -1316,10 +1343,11 @@ array // [{ 'a': 1 }]
 
 **ES6**
 
-The splat operator replaces apply, so we could try using that one as well. `let new_array = [...array]`. However, it too copies references.
+The splat operator replaces apply, so we could try using that one as well. However, it too copies references.
 
 ```js
-new_array[0]['a'] = 2
+let newArray = [...array]
+newArray[0]['a'] = 2
 array // [{ 'a': 2 }]
 ```
 
@@ -1495,7 +1523,7 @@ You can create prototype chains with `Object.create` as well.
 
 Here's the inverse of the prototype relationship testing examples from above, using `Object.create`.
 
-```
+```js
 var foo = {};
 
 var a = Object.create(foo);
@@ -1504,6 +1532,18 @@ foo.isPrototypeOf(a);             // true
 ```
 
 `Object.create(..)` creates a "new" object out of thin air, and links that new object's internal `[[Prototype]]` to the object you specify (`foo` in this case).
+
+**Not using `Object.create` for cloning**
+
+You usually would not use `Object.create` for cloning because it modifies the prototype inheritance chain for the newly created object as described above.
+
+```js
+// Continued from above ...
+var b = Object.assign({}, foo);
+
+Object.getPrototypeOf(a) === Object.prototype; // false
+Object.getPrototypeOf(b) === Object.prototype; // true
+```
 
 ### Prototypes & "Inheritance"
 
@@ -1540,7 +1580,23 @@ Dog.prototype.speak = function() {
 }
 
 var rover = new Dog();
-rover.speak();
+rover.speak(); // Bark!
+```
+
+It's completely fine if a new method is assigned after the new object is instantiated since they refer to the same prototype object.
+
+```js
+function Dog() {
+  this.species = "Dog";
+}
+
+var rover = new Dog();
+
+Dog.prototype.speak = function() {
+  console.log("Bark!")  
+}
+
+rover.speak();  // Bark!
 ```
 
 When `speak()` is called on `rover`, it looks for any `speak()` method on the instance. When it can't find one, it looks on the prototype for one. This same things is done for properties on instances (like `rover.species`). Here are other formats to use if you want to create multiple methods on the `Dog` prototype:
@@ -1583,7 +1639,17 @@ The `Dog` prototype object was reassigned, and the `speak` method on `rover` sti
 There will be no error if:
 
 * a) `rover` is instead instantiated on a line after the method `speak` is added to `Dog.prototype` (and before `rover.speak()` is called), or
-* b) If the `speak` method was added to the existing `Dog.prototype`, rather than reassigning it (i.e,`Dog.prototype.speak =  function () {}`). Even if `rover` was created before the `speak` method was defined, `rover` would still look to its original prototype object and find `speak` defined there.
+
+```js
+// ...
+// Dog.prototype = { speak: function { ... } }
+
+var rover = new Dog();
+
+rover.speak(): // Reference Error
+```
+
+* b) If the `speak` method was added to the existing `Dog.prototype` like above (i.e,`Dog.prototype.speak =  function () {}`), rather than reassigning the prototype object. Even if `rover` was created before the `speak` method was defined, `rover` would still look to its original prototype object and find `speak` defined there.
 
 2) You can also pass in a (singleton / object literal) object to `Object.create()`:
 
@@ -1608,7 +1674,7 @@ Objects can be created directly from other objects. Behaviors (methods) and stat
 * We can create dogs much more easily with the `dog` prototype - we don't have to duplicate `say` and `run` on every single dog object.
 * If we need to add/remove/update behavior to apply to all dogs, we can just modify the prototype object, and all dogs will pick up the changed behavior automatically.
 
-Objects on the bottom of the prototype chain can "delegate" requests to the upsteam objects to be handled.
+Objects on the bottom of the prototype chain can "delegate" requests to the upstream objects to be handled.
 
 ### Methods can be overridden locally
 
@@ -2686,6 +2752,8 @@ greet('Sam');   // Sam
 
 The value of a variable can change after creating a closure that includes the variable. When this happens, the closure sees the new value; the old value is no longer available.
 
+**Outer reference**
+
 ```js
 var count = 1;
 
@@ -2699,7 +2767,45 @@ count++;               // reassign count
 logCount();            // closure sees new value for count; logs: 2
 ```
 
-### Factory patten
+**"Closed over" reference**
+
+Examples using global variables can sometimes just seem like "global magic", so here's an example that's a bit more abstract.
+
+```js
+var Foo = function(value){
+  this.bar = function(){
+    return value;
+  };
+};
+
+var foo = new Foo("Hey");
+foo.bar();    // ?
+```
+
+What does this return? It might not be apparent, but `x` returns `"Hey"` when `baz` is called. Let's look at something a little more familiar - a slightly re-worked example of the `logCount` function above except that we'll modify it to use a constructor and a method like the `Foo` example.
+
+```js
+var Counter = function(count) {
+  this.addOne = function() {
+    count += 1;
+    console.log(count);
+  }
+}
+
+var count = new Counter(0);
+count.addOne(); // 1
+```
+
+- When `new Counter` is called, `0` is set to `count` in the new execution context.
+- The anonymous function assigned to `addOne` now takes in all local / context variables from it's outer execution context to assign to its local execution context. In this case it's just `count`.
+- The `count` variable is incremented, and then logged on the next line.
+
+It should now make more sense why `foo.bar` returned `"Hey"`. There's more on closures below, but if you want to see some other people's thoughts on the subject here are two good articles.
+
+https://medium.com/dailyjs/i-never-understood-javascript-closures-9663703368e8
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures#Closure
+
+### Factory pattern
 
 ```js
 function createAdder() {
@@ -2909,20 +3015,65 @@ function makeCounterLogger(start) {
 makeCounterLogger(5)(8)
 ```
 
-You could also call the function like so:
+**Persistent reference**
+
+An idea we touched on earlier was that you can pass in params that can be accessed later. The idea is also called currying, or partial application. Let's see it applied to our counter logger.
 
 ```js
-var countlog = makeCounterLogger(5);
-countlog(8);  // 5 6 7 8
+var countFromFiveTo = makeCounterLogger(5);
+var countFromFiveTo = makeCounterLogger(7);
+
+countFromFiveTo(8);  // 5 6 7 8
+countFromFiveTo(8);  // 7 8
 ```
 
-This behavior allows callbacks to take arguments, which can be useful when dealing with callback heavy libraries such as jQuery.
+This behavior allows callbacks to take arguments, which can be useful when dealing with callback heavy libraries such as jQuery or standard library methods that take a callback, like filter.
 
 http://www.jstips.co/en/javascript/passing-arguments-to-callback-functions/
 
-**Accessing variables in other scopes**
+#### Passing additional arguments to `filter`
 
-Sometimes another function will have a variable your function wants access. Local scope is hard to share especially between methods, so passing functions that take callbacks can help here.
+To shorten up some code, I wanted to pass in a function as a callback to `filter`
+
+```js
+this.activeFilters = this.activeFilters.filter((filterName) => {
+  return filter.name !== filterName;
+})
+```
+
+Extracting the filtering work to this function works, but doesn't feel great.
+
+```js
+const removeFilter = (filter) => {
+  return this.activeFilters.filter((filterName) => {
+    return filter.name !== filterName;
+  });
+}
+
+this.activeFilters = removeFilter(filter)
+```
+
+So we looked at closures to pass in to our filter. The problem was we needed an outside value, something like this `array.filter(removeItem(12))`.
+
+```js
+const removeItem = function(item) => {
+  return function(currentItem, index, array) => {
+    return item !== value
+  }
+}
+```
+
+This looks a bit better, but notice that there's a couple areas we can improve. 1) We included several extra parameters here for illustrative purposes we don't need. 2) Also, we can use ES6 to make this more terse. The result is this:
+
+```js
+const removeItem = item => currentItem => currentItem !== item;
+...
+this.activeFilters = this.activeFilters.filter(removeItem(filter.name))
+```
+
+#### Accessing variables in other scopes
+
+Sometimes another function will have a variable your function wants access to. Local scope is hard to share especially between methods, so passing functions that take callbacks can help here.
 
 ```js
 function otherFunc(mainCallback, local) {
@@ -2948,7 +3099,12 @@ main()
 
 If you didn't want to pass in local, and instead "close" over it
 
-```
+```js
+function otherFunc(mainCallback) {
+  var otherVar = 2;
+  return mainCallback(otherVar)
+}
+
 function main() {
   var local = 1;
 
@@ -2957,17 +3113,18 @@ function main() {
       return local + otherVar;
     })(local)
   };
-
-  //  ES6 syntax
-  // const callback = (otherVar) => ((local) => {
-  //  return local + otherVar;
-  // })(local);
-  // return otherFunc(callback, local)
 }
-main()
+
+main();
 ```
 
-You do an IIFE on the inner closure function. Which allows `main`to retain access to any local variable  passed to it’s inner function. In this case we passed in `local`. So when the `main` is invoked in the new scope (`otherFunc`) you can take in additional params without worry about passing in your previous local ones.
+```js
+  // ES6 version of `callback`
+  const callback = otherVar => (local => local + otherVar)(local);
+  // ...
+```
+
+You do an IIFE on the inner closure function. Which allows `mainCallback` to retain access to any local variable  passed to it’s inner function. In this case we passed in `local`. So when the `mainCallback` is invoked in the new scope (`otherFunc`) you can take in additional params without worry about passing in your previous local ones.
 
 ### Closures & OOP
 
@@ -3331,10 +3488,11 @@ Element properties do not include `textNodes`, so use `textContent` to element t
 ```html
 <p>
   You can <a href="?page=2">step backward</a> or <a href="/page/3">continue</a>.
-  </p>
+</p>
 ```
 ```js
-var p = document.querySelector('p')
+var p = document.querySelector('p');
+p.textContent // \n      You can step backward or continue.\n
 p.textContent = "Hey";
 p.textContent;  // "Hey
 ```
@@ -5101,6 +5259,41 @@ let a = 5;
 let objA = { a };
 ```
 
+### Implicit return
+
+```js
+var pushValue = function(ele, array) { array.push(ele); }
+const arr = []
+const val = 1
+const result = test(val, arr)
+console.log(res); // undefined
+```
+
+There's no `return` value, so this is expected. However in ES6 there's the concept of [implicit returns](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions#Basic_Syntax).
+
+>```
+>(param1, param2, …, paramN) => { statements }
+>(param1, param2, …, paramN) => expression
+>// equivalent to: => { return expression; }
+>```
+
+
+```js
+const pushValue = (ele, array) => array.push(ele)
+// ...
+console.log(res); // 1
+```
+
+I found this to be a bit surprising to be honest, and I can't explain why the result is an integer and not an array. Here's a link to more surprising uses, or omissions, of [return keyword in arrow functions](https://stackoverflow.com/a/28889451/3950092).
+
+**Destructured returns**
+
+```js
+elements.map(element => element.length); // [8, 6, 7, 9]
+
+elements.map(({ length }) => length); // [8, 6, 7, 9]
+```
+
 ### Splat/spread operator
 
 #### Combining / Gathering
@@ -5377,6 +5570,24 @@ let arrays = [[1,2],[3,4]];
 
 // ES6
 arrays.forEach(nums => nums.forEach(num => console.log(num)) )
+```
+
+Function declarations still require the `function` keyword, and can't make use of ES6 arrow function syntax.
+
+```js
+function sum(a, b) => a + b;
+sum(1,2) // SyntaxError
+```
+```js
+function sum(a, b) { return a + b; }
+sum(1,2) // 3
+```
+
+Using a function expression to an anonymous function lets us take advantage of the new terser syntax.
+
+```js
+const sum = (a, b) => a + b
+sum(1,2) // 3
 ```
 
 #### Automatic context binding
